@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>认证管理后台</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #F3F4F6; color: #1F2937; }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar { width: 240px; background: white; border-right: 1px solid #E5E7EB; padding: 24px 0; flex-shrink: 0; }
+    .sidebar-logo { padding: 0 20px 24px; border-bottom: 1px solid #E5E7EB; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .sidebar-logo span { font-size: 18px; font-weight: 700; color: #9333EA; }
+    .sidebar-logo small { font-size: 12px; color: #9CA3AF; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 12px 20px; margin: 2px 8px; border-radius: 8px; cursor: pointer; color: #4B5563; font-size: 14px; transition: all 0.2s; }
+    .nav-item:hover { background: #F5F3FF; color: #9333EA; }
+    .nav-item.active { background: #F5F3FF; color: #9333EA; font-weight: 600; }
+    .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .main { flex: 1; padding: 24px; min-width: 0; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .page-header h1 { font-size: 22px; font-weight: 700; }
+    .page-header p { font-size: 14px; color: #6B7280; margin-top: 4px; }
+    .tab-bar { display: flex; gap: 0; margin-bottom: 24px; background: white; border-radius: 10px; padding: 4px; border: 1px solid #E5E7EB; width: fit-content; }
+    .tab-btn { padding: 10px 24px; border-radius: 8px; border: none; background: transparent; font-size: 14px; font-weight: 500; cursor: pointer; color: #6B7280; transition: all 0.2s; }
+    .tab-btn.active { background: #9333EA; color: white; }
+    .tab-btn:hover:not(.active) { background: #F3F4F6; }
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: white; border-radius: 12px; padding: 20px; border: 1px solid #E5E7EB; }
+    .stat-card .num { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+    .stat-card .label { font-size: 13px; color: #6B7280; }
+    .stat-card .num.green { color: #10B981; }
+    .stat-card .num.red { color: #EF4444; }
+    .stat-card .num.purple { color: #9333EA; }
+    .stat-card .num.blue { color: #3B82F6; }
+    .filter-bar { background: white; border-radius: 12px; padding: 16px; border: 1px solid #E5E7EB; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .filter-bar input, .filter-bar select { padding: 8px 12px; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 13px; outline: none; }
+    .filter-bar input:focus, .filter-bar select:focus { border-color: #9333EA; }
+    .filter-bar input[type="text"] { width: 180px; }
+    .search-btn { padding: 8px 20px; background: #9333EA; color: white; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; }
+    .search-btn:hover { background: #7E22CE; }
+    .table-container { background: white; border-radius: 12px; border: 1px solid #E5E7EB; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: #F9FAFB; }
+    th { padding: 12px 16px; text-align: left; font-size: 13px; font-weight: 600; color: #374151; border-bottom: 1px solid #E5E7EB; white-space: nowrap; }
+    td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid #F3F4F6; color: #4B5563; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #FAFBFC; }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; }
+    .badge-success { background: #D1FAE5; color: #065F46; }
+    .badge-fail { background: #FEE2E2; color: #991B1B; }
+    .badge-pending { background: #FEF3C7; color: #92400E; }
+    .type-tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+    .type-personal { background: #F3E8FF; color: #6B21A8; }
+    .type-enterprise { background: #DBEAFE; color: #1E40AF; }
+    .type-agent { background: #FEF3C7; color: #D97706; }
+    .view-btn { padding: 4px 12px; background: #F3F4F6; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; color: #4B5563; }
+    .view-btn:hover { background: #E5E7EB; }
+    .detail-row td { background: #FAFBFC; padding: 16px 24px; }
+    .detail-box { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; padding: 16px; }
+    .detail-box h4 { font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .detail-box h4 .attempt-tag { font-size: 11px; background: #F3E8FF; color: #6B21A8; padding: 2px 8px; border-radius: 4px; font-weight: 400; }
+    .detail-section { margin-bottom: 20px; }
+    .detail-section:last-child { margin-bottom: 0; }
+    .detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .detail-item { display: flex; flex-direction: column; gap: 2px; }
+    .detail-item .label { font-size: 11px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; }
+    .detail-item .value { font-size: 13px; color: #1F2937; }
+    .detail-item .value.empty { color: #D1D5DB; font-style: italic; }
+    .img-preview { width: 100%; max-width: 200px; border-radius: 8px; border: 1px solid #E5E7EB; cursor: pointer; transition: transform 0.2s; }
+    .img-preview:hover { transform: scale(1.05); }
+    .empty-state { text-align: center; padding: 60px 20px; color: #9CA3AF; }
+    .empty-state svg { width: 48px; height: 48px; margin-bottom: 12px; color: #D1D5DB; }
+    .empty-state p { font-size: 14px; }
+    .page-info { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-top: 1px solid #E5E7EB; font-size: 13px; color: #6B7280; }
+
+    /* 审核弹窗样式 */
+    .audit-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 3000; }
+    .audit-overlay.active { display: block; }
+    .audit-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 800px; max-width: 90vw; max-height: 85vh; overflow: hidden; z-index: 3001; }
+    .audit-modal.active { display: block; }
+    .audit-header { padding: 20px 24px; border-bottom: 1px solid #E5E7EB; display: flex; justify-content: space-between; align-items: center; }
+    .audit-header h3 { font-size: 18px; font-weight: 700; color: #1F2937; }
+    .audit-close { width: 32px; height: 32px; background: #F3F4F6; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; color: #6B7280; }
+    .audit-close:hover { background: #E5E7EB; }
+    .audit-body { padding: 24px; overflow-y: auto; max-height: calc(85vh - 140px); }
+    .audit-footer { padding: 16px 24px; border-top: 1px solid #E5E7EB; display: flex; justify-content: flex-end; gap: 12px; }
+    .btn { padding: 8px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-secondary { background: #F3F4F6; color: #4B5563; }
+    .btn-secondary:hover { background: #E5E7EB; }
+    .btn-success { background: #10B981; color: white; }
+    .btn-success:hover { background: #059669; }
+    .btn-danger { background: #EF4444; color: white; }
+    .btn-danger:hover { background: #DC2626; }
+
+    .audit-section { margin-bottom: 24px; }
+    .audit-section:last-child { margin-bottom: 0; }
+    .audit-section h4 { font-size: 15px; font-weight: 600; color: #1F2937; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #F3F4F6; }
+    .audit-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .audit-item { display: flex; flex-direction: column; gap: 4px; }
+    .audit-item .label { font-size: 12px; color: #9CA3AF; }
+    .audit-item .value { font-size: 14px; color: #374151; }
+    .audit-images { display: flex; gap: 12px; flex-wrap: wrap; }
+    .audit-image { width: 180px; height: 120px; object-fit: contain; border: 1px solid #E5E7EB; border-radius: 8px; background: #F9FAFB; }
+    .audit-image:hover { transform: scale(1.02); }
+
+    /* 角色和菜单管理样式 */
+    .form-input { padding: 8px 12px; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 13px; outline: none; }
+    .form-input:focus { border-color: #9333EA; }
+    .pagination { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #6B7280; }
+    .page-btn { width: 32px; height: 32px; border: 1px solid #D1D5DB; background: white; border-radius: 6px; cursor: pointer; font-size: 13px; color: #4B5563; }
+    .page-btn:hover { border-color: #9333EA; color: #9333EA; }
+    .page-btn.active { background: #9333EA; color: white; border-color: #9333EA; }
+    .role-tag { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; }
+    .role-tag-platform { background: #DBEAFE; color: #1E40AF; }
+    .role-tag-agent { background: #FEF3C7; color: #92400E; }
+    .role-tag-enterprise { background: #D1FAE5; color: #065F46; }
+    .op-link { color: #9333EA; cursor: pointer; font-size: 13px; margin-right: 8px; text-decoration: none; }
+    .op-link:hover { text-decoration: underline; }
+    .op-link.danger { color: #EF4444; }
+    .op-link.warn { color: #F59E0B; }
+    .op-link.info { color: #3B82F6; }
+
+    /* 字段说明触发器 */
+    .field-trigger { display: inline-flex; align-items: center; gap: 2px; cursor: pointer; }
+    .field-trigger .info-icon { width: 14px; height: 14px; border-radius: 50%; background: #E5E7EB; color: #6B7280; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; margin-left: 4px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; line-height: 1; }
+    .field-trigger .info-icon:hover { background: #9333EA; color: white; }
+    th .field-trigger .info-icon { width: 13px; height: 13px; font-size: 9px; }
+    .label .field-trigger .info-icon { width: 12px; height: 12px; font-size: 8px; }
+
+    /* 浮层 */
+    .popover-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.35); z-index: 2000; }
+    .popover-overlay.active { display: block; }
+    .popover { display: none; position: fixed; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.25); border: 1px solid #E5E7EB; z-index: 2001; width: 420px; max-width: 90vw; padding: 0; top: 50%; left: 50%; transform: translate(-50%, -50%); max-height: 80vh; overflow-y: auto; }
+    .popover.active { display: block; }
+    .popover-header { padding: 18px 24px 14px; border-bottom: 1px solid #F3F4F6; display: flex; justify-content: space-between; align-items: center; }
+    .popover-header h3 { font-size: 16px; font-weight: 700; color: #1F2937; }
+    .popover-close { width: 28px; height: 28px; background: #F3F4F6; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #6B7280; flex-shrink: 0; }
+    .popover-close:hover { background: #E5E7EB; color: #1F2937; }
+    .popover-body { padding: 16px 24px 24px; }
+    .popover-section { margin-bottom: 14px; }
+    .popover-section:last-child { margin-bottom: 0; }
+    .popover-section .pop-label { font-size: 12px; color: #9CA3AF; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .popover-section .pop-value { font-size: 14px; color: #4B5563; line-height: 1.7; }
+    .popover-section .pop-value.code { font-family: 'SF Mono', Consolas, Monaco, monospace; background: #F9FAFB; padding: 8px 12px; border-radius: 6px; font-size: 13px; border: 1px solid #E5E7EB; }
+    .popover-section .pop-value .example { color: #9333EA; font-weight: 500; }
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .detail-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="#9333EA"><circle cx="12" cy="12" r="10"/></svg>
+        <div><span>冲电狼超级API平台</span><br><small>认证管理中心</small></div>
+      </div>
+      <div class="nav-item active" onclick="switchPage('auth')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>认证管理
+      </div>
+      <div class="nav-item" onclick="switchPage('role')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>角色管理
+      </div>
+      <div class="nav-item" onclick="switchPage('menu')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>菜单管理
+      </div>
+    </aside>
+    <div class="main">
+      <div class="page-header">
+        <div>
+          <h1 id="pageTitle">认证管理</h1>
+          <p id="pageSubtitle">查看和管理用户的认证与实名记录</p>
+        </div>
+      </div>
+      <div id="authPage">
+      <div class="stats-row">
+        <div class="stat-card"><div class="num purple" id="totalCount">0</div><div class="label">认证总记录</div></div>
+        <div class="stat-card"><div class="num green" id="successCount">0</div><div class="label">认证成功</div></div>
+        <div class="stat-card"><div class="num red" id="failCount">0</div><div class="label">认证失败</div></div>
+        <div class="stat-card"><div class="num blue" id="realnameCount">0</div><div class="label">实名总记录</div></div>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('auth')">认证记录</button>
+        <button class="tab-btn" onclick="switchTab('realname')">实名记录</button>
+      </div>
+      <div class="filter-bar">
+        <input type="text" id="searchInput" placeholder="搜索姓名/企业名称..." oninput="filterData()">
+        <select id="typeFilter" onchange="filterData()">
+          <option value="">全部类型</option>
+          <option value="personal">个人认证</option>
+          <option value="enterprise">企业认证</option>
+          <option value="agent">代理商认证</option>
+        </select>
+        <select id="statusFilter" onchange="filterData()">
+          <option value="">全部状态</option>
+          <option value="success">成功</option>
+          <option value="fail">失败</option>
+          <option value="pending">待审核</option>
+        </select>
+        <input type="date" id="dateFilter" onchange="filterData()">
+        <button class="search-btn" onclick="filterData()">搜索</button>
+      </div>
+
+      <!-- 认证记录 -->
+      <div class="table-container" id="authTable">
+        <table>
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>类型</th>
+              <th>认证方式</th>
+              <th>申请人</th>
+              <th>证件号</th>
+              <th>企业名称</th>
+              <th>提交时间</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="authTableBody"></tbody>
+        </table>
+        <div class="page-info" id="authPageInfo"></div>
+      </div>
+
+      <!-- 实名记录 -->
+      <div class="table-container" id="realnameTable" style="display:none;">
+        <table>
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>类型</th>
+              <th>认证方式</th>
+              <th>申请人</th>
+              <th>证件号</th>
+              <th>企业名称</th>
+              <th>认证时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="realnameTableBody"></tbody>
+        </table>
+        <div class="page-info" id="realnamePageInfo"></div>
+      </div>
+      </div>
+
+      <!-- 角色管理 -->
+      <div id="rolePage" style="display:none;">
+        <div class="filter-bar">
+          <input type="text" id="roleNameInput" placeholder="角色名称" class="form-input" style="width:160px;">
+          <input type="text" id="roleCodeInput" placeholder="权限标识" class="form-input" style="width:160px;">
+          <button class="search-btn" onclick="searchRoles()">查询</button>
+          <button class="search-btn" style="background:#F3F4F6;color:#4B5563;" onclick="clearRoleSearch()">清空</button>
+        </div>
+        <div style="margin-bottom:16px;">
+          <button class="search-btn" onclick="showAddRoleModal()">+ 新增</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>角色名称</th>
+                <th>角色编码</th>
+                <th>角色类型</th>
+                <th>角色标识</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="roleTableBody"></tbody>
+          </table>
+          <div class="page-info" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>共 <span id="roleTotalCount">0</span> 条</span>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <select style="padding:4px 8px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;">
+                <option>20条/页</option>
+                <option>50条/页</option>
+              </select>
+              <div class="pagination">
+                <button class="page-btn" onclick="changeRolePage(-1)">&lt;</button>
+                <button class="page-btn active" id="rolePageBtn1">1</button>
+                <button class="page-btn" id="rolePageBtn2">2</button>
+                <button class="page-btn" onclick="changeRolePage(1)">&gt;</button>
+                <span>前往</span>
+                <input type="text" value="1" style="width:40px;text-align:center;border:1px solid #D1D5DB;border-radius:4px;padding:2px;">
+                <span>页</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 菜单管理 -->
+      <div id="menuPage" style="display:none;">
+        <div class="filter-bar">
+          <input type="text" placeholder="菜单名称" class="form-input" style="width:160px;">
+          <button class="search-btn">查询</button>
+          <button class="search-btn" style="background:#F3F4F6;color:#4B5563;">清空</button>
+        </div>
+        <div style="margin-bottom:16px;">
+          <button class="search-btn">+ 新增</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>菜单名称</th>
+                <th>图标</th>
+                <th>排序</th>
+                <th>权限标识</th>
+                <th>组件路径</th>
+                <th>菜单状态</th>
+                <th>创建时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="menuTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 字段说明浮层 -->
+  <div class="popover-overlay" id="popoverOverlay" onclick="closePopover()"></div>
+  <div class="popover" id="popover">
+    <div class="popover-header">
+      <h3 id="popoverTitle">字段名称</h3>
+      <button class="popover-close" onclick="closePopover()">✕</button>
+    </div>
+    <div class="popover-body" id="popoverBody"></div>
+  </div>
+
+  <!-- 审核弹窗 -->
+  <div class="audit-overlay" id="auditOverlay" onclick="closeAuditModal()"></div>
+  <div class="audit-modal" id="auditModal">
+    <div class="audit-header">
+      <h3>企业认证审核</h3>
+      <button class="audit-close" onclick="closeAuditModal()">✕</button>
+    </div>
+    <div class="audit-body" id="auditBody"></div>
+    <div class="audit-footer">
+      <button class="btn btn-secondary" onclick="closeAuditModal()">取消</button>
+      <button class="btn btn-success" id="auditPassBtn" onclick="auditPass()">通过</button>
+      <button class="btn btn-danger" id="auditRejectBtn" onclick="auditReject()">拒绝</button>
+    </div>
+  </div>
+
+  <script>
+    // ========== 字段定义数据字典 ==========
+    const FIELD_DEFS = {
+      '序号': { name: '序号', label: '记录编号', desc: '系统自动生成的唯一认证记录编号，每条认证请求对应一个唯一序号。', type: '系统字段', format: '自增数字', example: '1, 2, 3...' },
+      '类型': { name: '类型', label: '认证类型', desc: '标识该认证申请的主体类型，分为个人认证和企业认证两种。个人认证适用于自然人用户；企业认证适用于公司、个体工商户、事业单位等组织。', type: '枚举值', format: 'personal / enterprise', example: '个人认证、企业认证' },
+      '认证方式': { name: '认证方式', label: '认证方式', desc: '完成身份验证的具体途径。三要素校验（个人/代理商）：通过姓名+身份证号+手机号与公安/运营商系统进行核验；人脸验证（企业）：通过支付宝App进行法定代表人活体检测。', type: '枚举值', format: '三要素校验 / 人脸验证', example: '三要素校验、人脸验证' },
+      '申请人': { name: '申请人', label: '申请人姓名', desc: '提交认证申请的用户真实姓名。个人认证为本人姓名；企业认证为法定代表人姓名。', type: '用户输入', format: '中文姓名', example: '张三、李四' },
+      '证件号': { name: '证件号', label: '证件号码', desc: '申请人的身份证件号码。个人认证为本人身份证号；企业认证为法定代表人身份证号。展示时中间10位会自动脱敏。', type: '用户输入', format: '18位身份证号', example: '110101**********34' },
+      '企业名称': { name: '企业名称', label: '企业/组织名称', desc: '申请认证的企业或组织机构的全称，需与营业执照上的登记名称完全一致。个人认证时此字段为空。', type: '用户输入', format: '企业全称', example: '北京科技有限公司' },
+      '提交时间': { name: '提交时间', label: '提交时间', desc: '用户点击"提交认证"按钮的时间戳，精确到秒。记录了认证申请的发起的精确时刻。', type: '系统记录', format: 'yyyy-MM-dd HH:mm:ss', example: '2025-06-01 14:23:10' },
+      '状态': { name: '状态', label: '认证状态', desc: '认证申请的当前处理结果。成功：所有核验通过；失败：某项核验未通过（可查看失败原因）；待审核：已提交但尚未完成处理。', type: '系统状态', format: 'success / fail / pending', example: '成功、失败、待审核' },
+      '操作': { name: '操作', label: '查看详情', desc: '点击"查看详情"按钮可展开该条记录的完整提交资料信息，包括证件图片、对公账户信息、打款金额等全部提交数据。', type: '功能操作', format: '按钮', example: '点击查看详情' },
+      '认证时间': { name: '认证时间', label: '认证通过时间', desc: '认证最终成功通过的时间戳。与提交时间不同，认证时间可能晚于提交时间（特别是对公打款需要等待银行处理）。', type: '系统记录', format: 'yyyy-MM-dd HH:mm:ss', example: '2025-06-08 09:15:00' },
+
+      // ====== 个人认证详情字段 ======
+      '真实姓名': { name: '真实姓名', label: '真实姓名', desc: '用户的真实姓名，与身份证件上的姓名完全一致。用于身份核验和实名登记。', type: '用户输入', format: '中文姓名', example: '张三' },
+      '证件类型': { name: '证件类型', label: '证件类型', desc: '用于认证的证件种类。目前仅支持中国大陆二代居民身份证。后续可能支持护照、港澳台居民居住证等。', type: '固定值', format: '中国大陆二代居民身份证', example: '中国大陆二代居民身份证' },
+      '身份证号码': { name: '身份证号码', label: '身份证号码', desc: '18位公民身份证号码，包含地址码、出生日期、顺序码和校验码。系统会对身份证号进行格式校验和有效性验证。', type: '用户输入', format: '18位数字+字符', example: '110101199001011234' },
+      '手机号码': { name: '手机号码', label: '手机号码', desc: '用户的手机联系方式，用于接收认证结果通知和重要安全提醒。', type: '用户输入', format: '11位手机号', example: '13812341234' },
+      '联系地址': { name: '联系地址', label: '联系地址', desc: '用户的常住地址或联系地址。可用于后续发票邮寄、法律文书送达等场景。', type: '用户输入', format: '详细地址', example: '北京市朝阳区建国路88号' },
+
+      // ====== 企业认证详情字段 ======
+      '企业/组织名称': { name: '企业/组织名称', label: '企业/组织名称', desc: '企业或组织在工商登记注册的完整法定名称，需与营业执照上的名称完全一致，包括括号、字母等特殊字符。', type: '用户输入', format: '企业全称', example: '北京科技有限公司' },
+      '统一社会信用代码': { name: '统一社会信用代码', label: '统一社会信用代码', desc: '营业执照上的18位统一社会信用代码，由登记管理部门代码、机构类别代码、登记管理机关行政区划码、主体标识码和校验码组成。', type: '用户输入', format: '18位字母+数字', example: '91110108MA01XXXXX' },
+      '法定代表人姓名': { name: '法定代表人姓名', label: '法定代表人姓名', desc: '企业在工商登记中登记的法定代表人姓名，需与身份证件完全一致。', type: '用户输入', format: '中文姓名', example: '王五' },
+      '法定代表人身份证': { name: '法定代表人身份证', label: '法定代表人身份证号', desc: '企业法定代表人的18位公民身份证号码，会与公安系统进行核验。', type: '用户输入', format: '18位身份证号', example: '110101198803034567' },
+      '企业地址': { name: '企业地址', label: '企业注册地址', desc: '企业在工商登记的注册地址，需与营业执照上的地址一致。', type: '用户输入', format: '详细地址', example: '北京市海淀区中关村大街1号' },
+      '企业联系电话': { name: '企业联系电话', label: '企业联系电话', desc: '企业的官方联系电话，用于认证过程中的核实和后续服务。', type: '用户输入', format: '固定电话/手机号', example: '010-82345678' },
+
+      // ====== 对公打款字段 ======
+      '开户银行': { name: '开户银行', label: '开户银行', desc: '企业对公账户的所属银行名称，如中国工商银行、中国建设银行、中国银行等。', type: '用户输入', format: '银行名称', example: '中国工商银行' },
+      '支行名称': { name: '支行名称', label: '开户支行名称', desc: '企业对公账户所属的具体支行或分理处名称，用于精准定位开户网点。', type: '用户输入', format: '支行全称', example: '上海浦东新区支行' },
+      '开户省份': { name: '开户省份', label: '开户省份/直辖市', desc: '企业开户支行所在的省份或直辖市。', type: '用户输入', format: '省份名称', example: '上海市、广东省' },
+      '开户城市': { name: '开户城市', label: '开户城市', desc: '企业开户支行所在的城市名称。', type: '用户输入', format: '城市名称', example: '上海市、深圳市' },
+      '银行账号': { name: '银行账号', label: '企业对公银行账号', desc: '企业的对公银行账户号码，用于接收验证打款。需确保账户状态正常且为企业对公账户。', type: '用户输入', format: '银行卡号', example: '6222021001234567890' },
+      '收到打款金额': { name: '收到打款金额', label: '收到打款金额', desc: '平台向企业对公账户实际打款的金额。平台会向该账户打入一笔小额随机金额，用于验证账户归属。', type: '系统生成', format: '金额（元）', example: '¥0.02' },
+      '回填验证金额': { name: '回填验证金额', label: '回填验证金额', desc: '用户收到打款后在页面回填的金额。若回填金额与系统打款金额一致，则验证通过。', type: '用户输入', format: '金额（元）', example: '¥0.02' },
+      '打款状态': { name: '打款状态', label: '打款状态', desc: '对公打款流程的当前进度。等待发起打款：平台尚未向该账户打款；已打款：平台已发起打款；已完成：用户已验证金额成功。', type: '系统状态', format: '状态文本', example: '等待发起打款、已打款¥0.02' },
+
+      // ====== 图片字段 ======
+      '证件图片': { name: '证件图片', label: '证件图片', desc: '用户上传的证件照片或扫描件。个人认证需上传身份证正反面；企业认证需上传营业执照和法人身份证。要求彩色原件，文字清晰可辨。', type: '用户上传', format: 'jpg/jpeg/png，不超过3MB', example: '身份证正面、营业执照' },
+      '营业执照': { name: '营业执照', label: '营业执照', desc: '企业工商营业执照的原件照片或彩色扫描件，正副本均可。要求文字、印章清晰可辨，无遮挡。', type: '用户上传', format: 'jpg/jpeg/png，不超过3MB', example: '营业执照图片' },
+      '身份证正面': { name: '身份证正面', label: '身份证正面', desc: '居民身份证带有头像和姓名信息的一面。要求完整拍摄，四角清晰，无反光、遮挡。', type: '用户上传', format: 'jpg/jpeg/png，不超过3MB', example: '身份证正面图片' },
+      '身份证反面': { name: '身份证反面', label: '身份证反面', desc: '居民身份证带有国徽和签发机关的一面。要求完整拍摄，有效期清晰可辨。', type: '用户上传', format: 'jpg/jpeg/png，不超过3MB', example: '身份证反面图片' },
+      '法人身份证正面': { name: '法人身份证正面', label: '法定代表人身份证正面', desc: '企业法定代表人的身份证正面照片，用于核实法定代表人身份信息。', type: '用户上传', format: 'jpg/jpeg/png，不超过3MB', example: '法人身份证正面图片' },
+      '法人身份证反面': { name: '法人身份证反面', label: '法定代表人身份证反面', desc: '企业法定代表人的身份证反面照片。', type: '用户上传', format: 'jpg/jpeg/png，不超过3MB', example: '法人身份证反面图片' },
+      '开户许可证': { name: '开户许可证', label: '银行开户许可证', desc: '企业在银行开立基本存款账户的开户许可证或银行账户信息表。部分银行对公打款验证需要提供。', type: '用户上传', format: 'jpg/jpeg/png，不超过3MB', example: '开户许可证图片' },
+
+      // ====== 失败原因 ======
+      '失败原因': { name: '失败原因', label: '认证失败原因', desc: '系统详细记录认证失败的具体原因，便于用户了解问题所在并针对性修改后重新提交。', type: '系统记录', format: '文本描述', example: '人脸识别未通过、身份证信息核验失败、打款金额验证不匹配' },
+
+      // ====== 认证历程 ======
+      '认证历程': { name: '认证历程', label: '认证历程', desc: '展示该用户/企业全部的认证尝试记录，包括每次的认证方式、提交时间、处理状态和结果。一条实名记录可能对应多次认证尝试。', type: '聚合数据', format: '时间线列表', example: '第1次：失败（人脸识别未通过）→ 第2次：成功' }
+    };
+
+    // ========== 数据字段映射（表格列 → 字段定义key） ==========
+    const COLUMN_FIELD_MAP = {
+      '序号': '序号',
+      '类型': '类型',
+      '认证方式': '认证方式',
+      '申请人': '申请人',
+      '证件号': '证件号',
+      '企业名称': '企业名称',
+      '提交时间': '提交时间',
+      '认证时间': '认证时间',
+      '状态': '状态',
+      '操作': '操作'
+    };
+
+    // ========== 详情标签映射 ==========
+    const LABEL_FIELD_MAP = {
+      '真实姓名': '真实姓名',
+      '证件类型': '证件类型',
+      '身份证号码': '身份证号码',
+      '手机号码': '手机号码',
+      '联系地址': '联系地址',
+      '企业名称': '企业/组织名称',
+      '统一社会信用代码': '统一社会信用代码',
+      '法定代表人姓名': '法定代表人姓名',
+      '法定代表人身份证': '法定代表人身份证',
+      '企业地址': '企业地址',
+      '企业联系电话': '企业联系电话',
+      '开户银行': '开户银行',
+      '支行名称': '支行名称',
+      '开户省份': '开户省份',
+      '开户城市': '开户城市',
+      '银行账号': '银行账号',
+      '收到打款金额': '收到打款金额',
+      '回填验证金额': '回填验证金额',
+      '打款状态': '打款状态',
+      '失败原因': '失败原因',
+      '证件图片': '证件图片',
+      '营业执照': '营业执照',
+      '身份证正面': '身份证正面',
+      '身份证反面': '身份证反面',
+      '法人身份证正面': '法人身份证正面',
+      '法人身份证反面': '法人身份证反面',
+      '开户许可证': '开户许可证',
+      '认证历程': '认证历程'
+    };
+
+    // ========== Popover 逻辑 ==========
+    function showPopover(fieldKey, triggerEl) {
+      const def = FIELD_DEFS[fieldKey];
+      if (!def) {
+        document.getElementById('popoverTitle').textContent = fieldKey;
+        document.getElementById('popoverBody').innerHTML = '<p style="color:#EF4444;font-size:14px;">该字段暂未定义说明</p>';
+        document.getElementById('popover').classList.add('active');
+        document.getElementById('popoverOverlay').classList.add('active');
+        return;
+      }
+
+      document.getElementById('popoverTitle').textContent = def.name;
+      const body = document.getElementById('popoverBody');
+      body.innerHTML = '';
+
+      body.insertAdjacentHTML('beforeend', `
+        <div class="popover-section">
+          <div class="pop-label">字段说明</div>
+          <div class="pop-value">${def.desc}</div>
+        </div>
+      `);
+      body.insertAdjacentHTML('beforeend', `
+        <div class="popover-section">
+          <div class="pop-label">数据类型</div>
+          <div class="pop-value">${def.type}</div>
+        </div>
+      `);
+      body.insertAdjacentHTML('beforeend', `
+        <div class="popover-section">
+          <div class="pop-label">数据格式</div>
+          <div class="pop-value code">${def.format}</div>
+        </div>
+      `);
+      body.insertAdjacentHTML('beforeend', `
+        <div class="popover-section">
+          <div class="pop-label">示例</div>
+          <div class="pop-value"><span class="example">${def.example}</span></div>
+        </div>
+      `);
+
+      document.getElementById('popover').classList.add('active');
+      document.getElementById('popoverOverlay').classList.add('active');
+    }
+
+    function closePopover() {
+      document.getElementById('popover').classList.remove('active');
+      document.getElementById('popoverOverlay').classList.remove('active');
+    }
+
+    // 点击 ESC 关闭
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closePopover();
+        closeAuditModal();
+      }
+    });
+
+    // ========== 审核弹窗逻辑 ==========
+    let currentAuditId = null;
+
+    function showAuditModal(recordId) {
+      const record = mockAuthRecords.find(r => r.id === recordId);
+      if (!record) return;
+
+      currentAuditId = recordId;
+      const body = document.getElementById('auditBody');
+      const data = record.submittedData;
+
+      let html = `
+        <div class="audit-section">
+          <h4>企业/代理商基本信息</h4>
+          <div class="audit-grid">
+            <div class="audit-item"><div class="label">企业名称</div><div class="value">${data.companyName || '-'}</div></div>
+            <div class="audit-item"><div class="label">统一社会信用代码</div><div class="value">${data.creditCode || '-'}</div></div>
+            <div class="audit-item"><div class="label">法定代表人</div><div class="value">${data.legalPersonName || '-'}</div></div>
+            <div class="audit-item"><div class="label">法人身份证号</div><div class="value">${data.legalPersonId ? data.legalPersonId.replace(/(\d{6})\d{8}(\d{4})/,'$1********$2') : '-'}</div></div>
+            <div class="audit-item"><div class="label">企业地址</div><div class="value">${data.companyAddress || '-'}</div></div>
+            <div class="audit-item"><div class="label">企业电话</div><div class="value">${data.companyPhone || '-'}</div></div>
+      `;
+
+      if (record.type === 'agent') {
+        html += `
+            <div class="audit-item"><div class="label">代理商级别</div><div class="value">${data.agentLevel || '-'}</div></div>
+            <div class="audit-item"><div class="label">代理区域</div><div class="value">${data.agentArea || '-'}</div></div>
+        `;
+      }
+
+      html += `
+          </div>
+        </div>
+      `;
+
+      if (false) {
+        // 对公账户信息已移除（企业认证不再使用对公打款方式）
+      }
+
+      const hasImages = data.licenseImg || data.idCardImg || data.idCardBackImg || data.licenseBackImg || data.bankLicenseImg;
+      if (hasImages) {
+        html += `
+          <div class="audit-section">
+            <h4>上传证件图片</h4>
+            <div class="audit-images">
+        `;
+        if (data.licenseImg) {
+          html += `<img src="${data.licenseImg}" class="audit-image" title="营业执照" />`;
+        }
+        if (data.idCardImg) {
+          html += `<img src="${data.idCardImg}" class="audit-image" title="法人身份证正面" />`;
+        }
+        if (data.idCardBackImg || data.licenseBackImg) {
+          html += `<img src="${data.idCardBackImg || data.licenseBackImg}" class="audit-image" title="法人身份证反面" />`;
+        }
+        if (data.bankLicenseImg) {
+          html += `<img src="${data.bankLicenseImg}" class="audit-image" title="开户许可证" />`;
+        }
+        html += `
+            </div>
+          </div>
+        `;
+      }
+
+      body.innerHTML = html;
+
+      document.getElementById('auditModal').classList.add('active');
+      document.getElementById('auditOverlay').classList.add('active');
+    }
+
+    function closeAuditModal() {
+      document.getElementById('auditModal').classList.remove('active');
+      document.getElementById('auditOverlay').classList.remove('active');
+      currentAuditId = null;
+    }
+
+    function auditPass() {
+      const record = mockAuthRecords.find(r => r.id === currentAuditId);
+      if (record) {
+        record.status = 'success';
+        record.failReason = null;
+      }
+      closeAuditModal();
+      filterData();
+      updateStats();
+      alert('审核通过！');
+    }
+
+    function auditReject() {
+      const reason = prompt('请输入拒绝原因：');
+      if (reason) {
+        const record = mockAuthRecords.find(r => r.id === currentAuditId);
+        if (record) {
+          record.status = 'fail';
+          record.failReason = reason;
+        }
+        closeAuditModal();
+        filterData();
+        updateStats();
+        alert('已拒绝该认证申请');
+      }
+    }
+    const mockAuthRecords = [
+      {
+        id: 1, personId: 'p-001', type: 'personal', method: '三要素校验',
+        name: '张三', idCard: '110101199001011234', company: '',
+        submitTime: '2025-06-01 14:23:10', status: 'success',
+        submittedData: {
+          name: '张三', idCard: '110101199001011234', idType: '中国大陆二代居民身份证',
+          phone: '13812341234', address: '北京市朝阳区建国路88号',
+          licenseImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>身份证正面</text></svg>',
+          licenseBackImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>身份证反面</text></svg>'
+        }
+      },
+      {
+        id: 2, personId: 'p-002', type: 'personal', method: '三要素校验',
+        name: '李四', idCard: '110101199005052345', company: '',
+        submitTime: '2025-06-02 09:15:33', status: 'fail', failReason: '人脸识别未通过',
+        submittedData: {
+          name: '李四', idCard: '110101199005052345', idType: '中国大陆二代居民身份证',
+          phone: '13956785678'
+        }
+      },
+      {
+        id: 3, personId: 'p-003', type: 'personal', method: '三要素校验',
+        name: '孙七', idCard: '110101199812128901', company: '',
+        submitTime: '2025-06-06 11:20:45', status: 'success',
+        submittedData: {
+          name: '孙七', idCard: '110101199812128901', idType: '中国大陆二代居民身份证',
+          phone: '13690129012', address: '上海市浦东新区张江高科技园区',
+          licenseImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>身份证正面</text></svg>',
+          licenseBackImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>身份证反面</text></svg>'
+        }
+      },
+      {
+        id: 4, personId: 'p-004', type: 'personal', method: '三要素校验',
+        name: '郑十', idCard: '110101200101012222', company: '',
+        submitTime: '2025-06-09 09:10:00', status: 'fail', failReason: '身份证信息核验失败',
+        submittedData: {
+          name: '郑十', idCard: '110101200101012222', idType: '中国大陆二代居民身份证'
+        }
+      },
+      {
+        id: 5, personId: 'p-004', type: 'personal', method: '三要素校验',
+        name: '郑十', idCard: '110101200101012222', company: '',
+        submitTime: '2025-06-10 10:30:00', status: 'fail', failReason: '人脸识别未通过',
+        submittedData: {
+          name: '郑十', idCard: '110101200101012222', idType: '中国大陆二代居民身份证',
+          phone: '13611112222'
+        }
+      },
+      {
+        id: 6, personId: 'p-005', type: 'personal', method: '三要素校验',
+        name: '杨三', idCard: '110101199506065555', company: '',
+        submitTime: '2025-06-11 08:22:18', status: 'success',
+        submittedData: {
+          name: '杨三', idCard: '110101199506065555', idType: '中国大陆二代居民身份证',
+          phone: '13734563456', address: '广东省深圳市南山区科技园',
+          licenseImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>身份证正面</text></svg>',
+          licenseBackImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>身份证反面</text></svg>'
+        }
+      },
+      {
+        id: 7, personId: 'p-006', type: 'personal', method: '三要素校验',
+        name: '黄四', idCard: '110101198808086666', company: '',
+        submitTime: '2025-06-11 10:45:39', status: 'fail', failReason: '姓名与身份证号不匹配',
+        submittedData: { name: '黄四', idCard: '110101198808086666', idType: '中国大陆二代居民身份证' }
+      },
+      {
+        id: 8, personId: 'e-001', type: 'enterprise', method: '人脸验证',
+        name: '王五', idCard: '110101198803034567', company: '北京科技有限公司',
+        submitTime: '2025-06-03 16:42:21', status: 'success',
+        submittedData: {
+          companyName: '北京科技有限公司', creditCode: '91110108MA01XXXXX',
+          legalPersonName: '王五', legalPersonId: '110101198803034567',
+          licenseImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>营业执照</text></svg>',
+          idCardImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>法人身份证正面</text></svg>',
+          idCardBackImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>法人身份证反面</text></svg>',
+          companyAddress: '北京市海淀区中关村大街1号',
+          companyPhone: '010-82345678'
+        }
+      },
+      {
+        id: 9, personId: 'e-002', type: 'enterprise', method: '人脸验证',
+        name: '赵六', idCard: '110101197507076789', company: '上海数据有限公司',
+        submitTime: '2025-06-05 10:30:00', status: 'pending',
+        submittedData: {
+          companyName: '上海数据有限公司', creditCode: '91310000MA01YYYYY',
+          legalPersonName: '赵六', legalPersonId: '110101197507076789',
+          licenseImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>营业执照</text></svg>'
+        }
+      },
+      {
+        id: 10, personId: 'e-002', type: 'enterprise', method: '人脸验证',
+        name: '赵六', idCard: '110101197507076789', company: '上海数据有限公司',
+        submitTime: '2025-06-07 14:20:00', status: 'fail', failReason: '三要素核验未通过',
+        submittedData: {
+          companyName: '上海数据有限公司', creditCode: '91310000MA01YYYYY',
+          legalPersonName: '赵六', legalPersonId: '110101197507076789'
+        }
+      },
+      {
+        id: 11, personId: 'e-002', type: 'enterprise', method: '人脸验证',
+        name: '赵六', idCard: '110101197507076789', company: '上海数据有限公司',
+        submitTime: '2025-06-08 09:15:00', status: 'success',
+        submittedData: {
+          companyName: '上海数据有限公司', creditCode: '91310000MA01YYYYY',
+          legalPersonName: '赵六', legalPersonId: '110101197507076789',
+          licenseImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22/><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>营业执照</text></svg>'
+        }
+      },
+      {
+        id: 12, personId: 'e-003', type: 'enterprise', method: '人脸验证',
+        name: '周八', idCard: '110101198509091234', company: '深圳创新科技有限公司',
+        submitTime: '2025-06-07 08:55:12', status: 'fail', failReason: '三要素核验未通过',
+        submittedData: {
+          companyName: '深圳创新科技有限公司', creditCode: '91440300MA01ZZZZZ',
+          legalPersonName: '周八', legalPersonId: '110101198509091234'
+        }
+      },
+      {
+        id: 13, personId: 'e-004', type: 'enterprise', method: '人脸验证',
+        name: '吴九', idCard: '110101199003031111', company: '广州云计算有限公司',
+        submitTime: '2025-06-08 15:40:33', status: 'success',
+        submittedData: {
+          companyName: '广州云计算有限公司', creditCode: '91440101MA01WWWWW',
+          legalPersonName: '吴九', legalPersonId: '110101199003031111',
+          licenseImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>营业执照</text></svg>',
+          idCardImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>法人身份证正面</text></svg>',
+          companyAddress: '广州市天河区珠江新城'
+        }
+      },
+      {
+        id: 14, personId: 'e-005', type: 'enterprise', method: '人脸验证',
+        name: '陈一', idCard: '110101198212123333', company: '成都人工智能有限公司',
+        submitTime: '2025-06-10 14:05:22', status: 'pending',
+        submittedData: {
+          companyName: '成都人工智能有限公司', creditCode: '91510100MA01VVVVV',
+          legalPersonName: '陈一', legalPersonId: '110101198212123333',
+          licenseImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>营业执照</text></svg>'
+        }
+      },
+      {
+        id: 15, personId: 'e-005', type: 'enterprise', method: '人脸验证',
+        name: '陈一', idCard: '110101198212123333', company: '成都人工智能有限公司',
+        submitTime: '2025-06-12 11:30:00', status: 'success',
+        submittedData: {
+          companyName: '成都人工智能有限公司', creditCode: '91510100MA01VVVVV',
+          legalPersonName: '陈一', legalPersonId: '110101198212123333',
+          licenseImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>营业执照</text></svg>'
+        }
+      },
+      {
+        id: 16, personId: 'e-006', type: 'enterprise', method: '人脸验证',
+        name: '林二', idCard: '110101197808084444', company: '武汉大数据有限公司',
+        submitTime: '2025-06-10 16:30:00', status: 'success',
+        submittedData: {
+          companyName: '武汉大数据有限公司', creditCode: '91420100MA01UUUUU',
+          legalPersonName: '林二', legalPersonId: '110101197808084444',
+          licenseImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>营业执照</text></svg>',
+          idCardImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>法人身份证正面</text></svg>',
+          companyAddress: '武汉市东湖新技术开发区'
+        }
+      },
+      {
+        id: 18, personId: 'a-001', type: 'agent', method: '三要素校验',
+        name: '刘代理', idCard: '110101199202025555', company: '北京代理科技有限公司',
+        submitTime: '2025-06-09 09:00:00', status: 'success',
+        submittedData: {
+          companyName: '北京代理科技有限公司', creditCode: '91110105MA01XXXXX',
+          legalPersonName: '刘代理', legalPersonId: '110101199202025555',
+          licenseImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>营业执照</text></svg>',
+          idCardImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>法人身份证正面</text></svg>',
+          agentLevel: '一级代理商',
+          agentArea: '华北地区'
+        }
+      },
+      {
+        id: 19, personId: 'a-002', type: 'agent', method: '三要素校验',
+        name: '孙代理', idCard: '110101198909096666', company: '上海代理服务有限公司',
+        submitTime: '2025-06-11 14:30:00', status: 'success',
+        submittedData: {
+          companyName: '上海代理服务有限公司', creditCode: '91310105MA01YYYYY',
+          legalPersonName: '孙代理', legalPersonId: '110101198909096666',
+          licenseImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>营业执照</text></svg>',
+          idCardImg: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22140%22><rect fill=%22%23E5E7EB%22 width=%22200%22 height=%22140%22/><text x=%22100%22 y=%2275%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%236B7280%22 text-anchor=%22middle%22>法人身份证正面</text></svg>',
+          agentLevel: '二级代理商',
+          agentArea: '华东地区'
+        }
+      },
+      {
+        id: 20, personId: 'a-003', type: 'agent', method: '三要素校验',
+        name: '马代理', idCard: '110101199303037777', company: '深圳代理科技有限公司',
+        submitTime: '2025-06-12 10:15:00', status: 'pending',
+        submittedData: {
+          companyName: '深圳代理科技有限公司', creditCode: '91440300MA01ZZZZZ',
+          legalPersonName: '马代理', legalPersonId: '110101199303037777'
+        }
+      }
+    ];
+
+    // 补充：张三有2条认证记录
+    mockAuthRecords.push({
+      id: 17, personId: 'p-001', type: 'personal', method: '三要素校验',
+      name: '张三', idCard: '110101199001011234', company: '',
+      submitTime: '2025-05-28 16:10:00', status: 'fail', failReason: '人脸识别未通过',
+      submittedData: {
+        name: '张三', idCard: '110101199001011234', idType: '中国大陆二代居民身份证',
+        phone: '13812341234'
+      }
+    });
+
+    let currentTab = 'auth';
+
+    // ========== 渲染函数 ==========
+    function renderAuthTable(data) {
+      const tbody = document.getElementById('authTableBody');
+      const pageInfo = document.getElementById('authPageInfo');
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg><p>暂无认证记录</p></div></td></tr>';
+        pageInfo.textContent = ''; return;
+      }
+      tbody.innerHTML = data.map(item => {
+        const s = item.status;
+        // 代理商认证不需要审核，pending 状态直接显示为成功
+        const displayStatus = (item.type === 'agent' && s === 'pending') ? 'success' : s;
+        const statusHtml = displayStatus === 'success' ? '<span class="badge badge-success">成功</span>'
+          : displayStatus === 'fail' ? `<span class="badge badge-fail">失败${item.failReason ? '：'+item.failReason : ''}</span>`
+          : '<span class="badge badge-pending">待审核</span>';
+        const typeHtml = item.type === 'personal'
+          ? '<span class="type-tag type-personal">个人认证</span>'
+          : item.type === 'enterprise'
+            ? '<span class="type-tag type-enterprise">企业认证</span>'
+            : '<span class="type-tag type-agent">代理商认证</span>';
+        const idCardMasked = item.idCard ? item.idCard.replace(/(\d{6})\d{10}(\d{2})/,'$1**********$2') : '-';
+        const isEnterprise = item.type === 'enterprise';
+        const isPending = item.status === 'pending';
+        const actionHtml = isEnterprise && isPending
+          ? `<button class="view-btn" onclick="showAuditModal(${item.id})">审核</button>`
+          : `<button class="view-btn" onclick="toggleAuthDetail(${item.id})">查看详情</button>`;
+        return `<tr>
+          <td>${item.id}</td>
+          <td>${typeHtml}</td>
+          <td>${item.method}</td>
+          <td>${item.name}</td>
+          <td>${idCardMasked}</td>
+          <td>${item.company || '-'}</td>
+          <td>${item.submitTime}</td>
+          <td>${statusHtml}</td>
+          <td>${actionHtml}</td>
+        </tr>
+        <tr class="detail-row" id="auth-detail-${item.id}" style="display:none;">
+          <td colspan="9"><div class="detail-box">${buildAuthDetail(item)}</div></td>
+        </tr>`;
+      }).join('');
+      pageInfo.textContent = `共 ${data.length} 条记录`;
+    }
+
+    function renderRealnameTable(data) {
+      const tbody = document.getElementById('realnameTableBody');
+      const pageInfo = document.getElementById('realnamePageInfo');
+      // 实名记录：只取成功的，按 personId 去重（一人/一企业只一条）
+      const successData = data.filter(d => d.status === 'success');
+      const seen = new Set();
+      const deduped = successData.filter(d => {
+        const key = d.personId;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+      if (deduped.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg><p>暂无实名记录</p></div></td></tr>';
+        pageInfo.textContent = ''; return;
+      }
+      tbody.innerHTML = deduped.map(item => {
+        const typeHtml = item.type === 'personal'
+          ? '<span class="type-tag type-personal">个人认证</span>'
+          : item.type === 'enterprise'
+            ? '<span class="type-tag type-enterprise">企业认证</span>'
+            : '<span class="type-tag type-agent">代理商认证</span>';
+        const idCardMasked = item.idCard ? item.idCard.replace(/(\d{6})\d{10}(\d{2})/,'$1**********$2') : '-';
+        return `<tr>
+          <td>${item.id}</td>
+          <td>${typeHtml}</td>
+          <td>${item.method}</td>
+          <td>${item.name}</td>
+          <td>${idCardMasked}</td>
+          <td>${item.company || '-'}</td>
+          <td>${item.submitTime}</td>
+          <td>
+            <button class="view-btn" onclick="toggleRealnameDetail('${item.personId}')">查看详情</button>
+            <button class="view-btn" style="background:#FEE2E2;color:#991B1B;margin-left:8px;" onclick="clearRealname('${item.personId}')">清空</button>
+          </td>
+        </tr>
+        <tr class="detail-row" id="realname-detail-${item.personId.replace(/[^a-zA-Z0-9]/g,'')}" style="display:none;">
+          <td colspan="8"><div class="detail-box">${buildRealnameDetail(item.personId, data)}</div></td>
+        </tr>`;
+      }).join('');
+      pageInfo.textContent = `共 ${deduped.length} 条记录（去重后）`;
+    }
+
+    function clearRealname(personId) {
+      if (!confirm('确定要清空该实名记录吗？此操作不可恢复。')) return;
+      const records = mockAuthRecords.filter(r => r.personId === personId && r.status === 'success');
+      records.forEach(r => {
+        r.status = 'fail';
+        r.failReason = '实名记录已被管理员清空';
+      });
+      filterData();
+      updateStats();
+      alert('已清空该实名记录');
+    }
+
+    // ========== 详情构建 ==========
+    function buildAuthDetail(item) {
+      const d = item.submittedData || {};
+      const empty = '<span class="value empty">（未提交）</span>';
+
+      // 添加 info icon 辅助函数
+      function labelWithInfo(text) {
+        const mapKey = LABEL_FIELD_MAP[text] || text;
+        return `<span class="label">${text}<span class="field-trigger" style="display:inline;margin-left:2px;"><span class="info-icon" onclick="event.stopPropagation();showPopover('${mapKey}',this)">?</span></span></span>`;
+      }
+
+      let html = `<div class="detail-section"><h4>提交资料信息</h4><div class="detail-grid">`;
+
+      if (item.type === 'personal') {
+        html += `
+          <div class="detail-item">${labelWithInfo('真实姓名')}<span class="value">${d.name || empty}</span></div>
+          <div class="detail-item">${labelWithInfo('证件类型')}<span class="value">${d.idType || empty}</span></div>
+          <div class="detail-item">${labelWithInfo('身份证号码')}<span class="value">${d.idCard || empty}</span></div>
+          <div class="detail-item">${labelWithInfo('手机号码')}<span class="value">${d.phone || empty}</span></div>
+          <div class="detail-item">${labelWithInfo('联系地址')}<span class="value">${d.address || empty}</span></div>
+          <div class="detail-item">${labelWithInfo('认证方式')}<span class="value">${item.method}</span></div>
+        `;
+      } else {
+        html += `
+          <div class="detail-item">${labelWithInfo('企业名称')}<span class="value">${d.companyName || empty}</span></div>
+          <div class="detail-item">${labelWithInfo('统一社会信用代码')}<span class="value">${d.creditCode || empty}</span></div>
+          <div class="detail-item">${labelWithInfo('法定代表人姓名')}<span class="value">${d.legalPersonName || empty}</span></div>
+          <div class="detail-item">${labelWithInfo('法定代表人身份证')}<span class="value">${d.legalPersonId || empty}</span></div>
+          <div class="detail-item">${labelWithInfo('企业地址')}<span class="value">${d.companyAddress || empty}</span></div>
+          <div class="detail-item">${labelWithInfo('企业联系电话')}<span class="value">${d.companyPhone || empty}</span></div>
+          <div class="detail-item">${labelWithInfo('认证方式')}<span class="value">${item.method}</span></div>
+        `;
+      }
+
+      html += `</div></div>`;
+
+      // 图片资料
+      const imgs = [];
+      if (d.licenseImg) imgs.push({src:d.licenseImg, label: item.type === 'personal' ? '身份证正面' : '营业执照'});
+      if (d.licenseBackImg) imgs.push({src:d.licenseBackImg, label:'身份证反面'});
+      if (d.idCardImg) imgs.push({src:d.idCardImg, label:'法人身份证正面'});
+      if (d.idCardBackImg) imgs.push({src:d.idCardBackImg, label:'法人身份证反面'});
+      if (d.bankLicenseImg) imgs.push({src:d.bankLicenseImg, label:'开户许可证'});
+      if (imgs.length > 0) {
+        // 辅助函数用于图片label的info图标
+        function getInfoIcon(labelText) {
+          const mapKey = LABEL_FIELD_MAP[labelText] || labelText;
+          return `<span class="info-icon" style="display:inline-flex;width:12px;height:12px;border-radius:50%;background:#E5E7EB;color:#6B7280;align-items:center;justify-content:center;font-size:8px;cursor:pointer;vertical-align:middle;margin-left:2px;" onclick="event.stopPropagation();showPopover('${mapKey}',this)">?</span>`;
+        }
+        html += `<div class="detail-section"><h4>${labelWithInfo('证件图片')}</h4><div style="display:flex;gap:12px;flex-wrap:wrap;">`;
+        imgs.forEach(img => {
+          const imgLabel = img.label;
+          html += `<div><img class="img-preview" src="${img.src}" alt="${img.label}" title="${img.label}"><div style="font-size:11px;color:#9CA3AF;text-align:center;margin-top:4px;">${imgLabel} ${getInfoIcon(imgLabel)}</div></div>`;
+        });
+        html += `</div></div>`;
+      }
+
+      // 对公打款特有信息（已移除，企业认证不再使用对公打款方式）
+      if (false) {
+        // 对公账户信息已不再使用
+      }
+
+      // 失败原因
+      if (item.status === 'fail' && item.failReason) {
+        html += `<div class="detail-section"><h4>${labelWithInfo('失败原因')}</h4><p style="color:#EF4444;font-size:13px;">${item.failReason}</p></div>`;
+      }
+
+      return html;
+    }
+
+    function buildRealnameDetail(personId, allData) {
+      // 获取该 personId 的所有认证记录（包括失败/成功）
+      const records = allData.filter(d => d.personId === personId);
+      const successRecord = records.find(d => d.status === 'success');
+      if (!successRecord) return '<p>无成功记录</p>';
+
+      // 添加 info icon 辅助函数
+      function labelWithInfo(text) {
+        const mapKey = LABEL_FIELD_MAP[text] || text;
+        return `<span class="label">${text}<span class="field-trigger" style="display:inline;margin-left:2px;"><span class="info-icon" onclick="event.stopPropagation();showPopover('${mapKey}',this)">?</span></span></span>`;
+      }
+
+      let html = '';
+
+      // 1. 成功记录的资料详情
+      html += `<div class="detail-section"><h4>实名认证信息 <span class="attempt-tag">认证成功</span></h4>`;
+      html += buildAuthDetail(successRecord);
+      html += `</div>`;
+
+      // 2. 多次尝试记录
+      if (records.length > 1) {
+        html += `<div class="detail-section"><h4>${labelWithInfo('认证历程')}（共 ${records.length} 次尝试）</h4>`;
+        records.sort((a,b) => a.id - b.id).forEach((r, idx) => {
+          const statusText = r.status === 'success' ? '✅ 成功' : r.status === 'fail' ? `❌ 失败 (${r.failReason || ''})` : '⏳ 待审核';
+          html += `<div style="background:white;border-radius:8px;padding:12px 16px;margin-bottom:8px;border:1px solid #E5E7EB;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <span style="font-size:13px;font-weight:600;color:#374151;">第 ${idx+1} 次尝试 - ${r.method}</span>
+              <span style="font-size:12px;">${r.submitTime} | ${statusText}</span>
+            </div>`;
+          // 对公打款的特殊信息显示（已移除）
+          if (false) {
+            // 对公打款信息已不再使用
+          }
+          html += `</div>`;
+        });
+        html += `</div>`;
+      }
+
+      return html;
+    }
+
+    function toggleAuthDetail(id) {
+      const el = document.getElementById('auth-detail-'+id);
+      if (!el) return;
+      el.style.display = el.style.display === 'none' ? 'table-row' : 'none';
+    }
+
+    function toggleRealnameDetail(personId) {
+      const safeId = personId.replace(/[^a-zA-Z0-9]/g,'');
+      const el = document.getElementById('realname-detail-'+safeId);
+      if (!el) return;
+      el.style.display = el.style.display === 'none' ? 'table-row' : 'none';
+    }
+
+    // ========== 筛选 ==========
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('authTable').style.display = tab === 'auth' ? '' : 'none';
+      document.getElementById('realnameTable').style.display = tab === 'realname' ? '' : 'none';
+    }
+
+    function filterData() {
+      const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+      const type = document.getElementById('typeFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      const date = document.getElementById('dateFilter').value;
+      let filtered = mockAuthRecords.filter(item => {
+        // 代理商认证不进入"待审核"筛选（代理商不需要审核）
+        if (status === 'pending' && item.type === 'agent') return false;
+        if (keyword && !item.name.toLowerCase().includes(keyword) && !item.company.toLowerCase().includes(keyword)) return false;
+        if (type && item.type !== type) return false;
+        if (status && item.status !== status) return false;
+        if (date && !item.submitTime.startsWith(date)) return false;
+        return true;
+      });
+      renderAuthTable(filtered);
+      renderRealnameTable(filtered);
+      updateStats(filtered);
+    }
+
+    function updateStats(data) {
+      document.getElementById('totalCount').textContent = data.length;
+      document.getElementById('successCount').textContent = data.filter(d => d.status === 'success').length;
+      document.getElementById('failCount').textContent = data.filter(d => d.status === 'fail').length;
+      const seen = new Set();
+      const deduped = data.filter(d => d.status === 'success' && !seen.has(d.personId) && seen.add(d.personId));
+      document.getElementById('realnameCount').textContent = deduped.length;
+    }
+
+    // 初始化
+    renderAuthTable(mockAuthRecords);
+    renderRealnameTable(mockAuthRecords);
+    updateStats(mockAuthRecords);
+
+    // ========== 角色管理 ==========
+    const mockRoles = [
+      { name: '管理员', code: 'obama_role_1_admin', type: '代理商', identifier: 'obama_role_1_admin' },
+      { name: '业务员', code: 'obama_role_1_bd', type: '代理商', identifier: 'obama_role_1_bd' },
+      { name: '客服', code: 'obama_role_1_c_s', type: '代理商', identifier: 'obama_role_1_c_s' },
+      { name: '运营', code: 'obama_role_1_o_s', type: '代理商', identifier: 'obama_role_1_o_s' },
+      { name: '财务', code: 'obama_role_2_financial', type: '平台', identifier: 'obama_role_2_financi' },
+      { name: '运营', code: 'obama_role_2_o_s', type: '平台', identifier: 'obama_role_2_o_s' },
+      { name: '管理员', code: 'admin', type: '平台', identifier: 'admin' },
+      { name: 'test', code: 'test', type: '代理商', identifier: 'test' },
+      { name: '渠道经理', code: 'channel_manager', type: '代理商', identifier: 'channel_manager' },
+      { name: '财务', code: 'obama_role_1_financial', type: '代理商', identifier: 'obama_role_1_financ' },
+      { name: '企业管理员', code: 'enterprise_admin', type: '企业', identifier: 'enterprise_admin' },
+      { name: '企业操作员', code: 'enterprise_operator', type: '企业', identifier: 'enterprise_operator' }
+    ];
+
+    function renderRoleTable(data) {
+      const tbody = document.getElementById('roleTableBody');
+      document.getElementById('roleTotalCount').textContent = data.length;
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:60px;color:#9CA3AF;">暂无角色数据</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.map(r => {
+        const typeHtml = r.type === '平台'
+          ? '<span class="role-tag role-tag-platform">平台</span>'
+          : r.type === '企业'
+            ? '<span class="role-tag role-tag-enterprise">企业</span>'
+            : '<span class="role-tag role-tag-agent">代理商</span>';
+        return `<tr>
+          <td>${r.name}</td>
+          <td>${r.code}</td>
+          <td>${typeHtml}</td>
+          <td>${r.identifier}</td>
+          <td>
+            <a class="op-link" onclick="showRoleDetail('${r.code}')">详情</a>
+            <a class="op-link warn" onclick="editRole('${r.code}')">修改</a>
+            <a class="op-link danger" onclick="deleteRole('${r.code}')">删除</a>
+            <a class="op-link info" onclick="viewRoleMembers('${r.code}')">查看员工</a>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    function searchRoles() {
+      const name = document.getElementById('roleNameInput').value.trim().toLowerCase();
+      const code = document.getElementById('roleCodeInput').value.trim().toLowerCase();
+      const filtered = mockRoles.filter(r => {
+        if (name && !r.name.toLowerCase().includes(name)) return false;
+        if (code && !r.code.toLowerCase().includes(code)) return false;
+        return true;
+      });
+      renderRoleTable(filtered);
+    }
+
+    function clearRoleSearch() {
+      document.getElementById('roleNameInput').value = '';
+      document.getElementById('roleCodeInput').value = '';
+      renderRoleTable(mockRoles);
+    }
+
+    function showAddRoleModal() {
+      alert('打开新增角色弹窗');
+    }
+
+    function showRoleDetail(code) {
+      const role = mockRoles.find(r => r.code === code);
+      if (role) alert(`角色详情：\n名称：${role.name}\n编码：${role.code}\n类型：${role.type}\n标识：${role.identifier}`);
+    }
+
+    function editRole(code) {
+      alert('打开修改角色弹窗：' + code);
+    }
+
+    function deleteRole(code) {
+      if (confirm('确定要删除该角色吗？')) {
+        const idx = mockRoles.findIndex(r => r.code === code);
+        if (idx >= 0) mockRoles.splice(idx, 1);
+        renderRoleTable(mockRoles);
+      }
+    }
+
+    function viewRoleMembers(code) {
+      alert('查看员工列表：' + code);
+    }
+
+    function changeRolePage(dir) {
+      // 简化分页交互
+      const btn1 = document.getElementById('rolePageBtn1');
+      const btn2 = document.getElementById('rolePageBtn2');
+      if (dir > 0) {
+        btn1.classList.remove('active');
+        btn2.classList.add('active');
+      } else {
+        btn2.classList.remove('active');
+        btn1.classList.add('active');
+      }
+    }
+
+    // ========== 菜单管理 ==========
+    const mockMenus = [
+      { name: '控制台', icon: 'dashboard', sort: 1, code: 'console', path: 'console/index', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '数据看板', icon: 'chart', sort: 2, code: 'console:dashboard', path: 'console/dashboard', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '令牌管理', icon: 'key', sort: 3, code: 'console:tokens', path: 'console/tokens', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '使用日志', icon: 'log', sort: 4, code: 'console:logs:usage', path: 'console/logs/usage', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '绘图日志', icon: 'image', sort: 5, code: 'console:logs:draw', path: 'console/logs/draw', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '任务日志', icon: 'task', sort: 6, code: 'console:logs:task', path: 'console/logs/task', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '钱包管理', icon: 'wallet', sort: 7, code: 'center:wallet', path: 'center/wallet', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '个人设置', icon: 'user', sort: 8, code: 'center:settings', path: 'center/settings', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '实名认证', icon: 'shield', sort: 9, code: 'center:auth', path: 'center/auth', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '渠道管理', icon: 'channel', sort: 10, code: 'admin:channel', path: 'admin/channel', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '订阅管理', icon: 'subscription', sort: 11, code: 'admin:subscription', path: 'admin/subscription', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '模型管理', icon: 'cube', sort: 12, code: 'admin:model', path: 'admin/model', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '模型部署', icon: 'server', sort: 13, code: 'admin:deploy', path: 'admin/deploy', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '兑换码管理', icon: 'gift', sort: 14, code: 'admin:redeem', path: 'admin/redeem', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '用户管理', icon: 'users', sort: 15, code: 'admin:user', path: 'admin/user', status: '启用', createTime: '2025-01-01 10:00:00' },
+      { name: '系统设置', icon: 'settings', sort: 16, code: 'admin:settings', path: 'admin/settings', status: '启用', createTime: '2025-01-01 10:00:00' }
+    ];
+
+    function renderMenuTable() {
+      const tbody = document.getElementById('menuTableBody');
+      tbody.innerHTML = mockMenus.map(m => {
+        const statusHtml = m.status === '启用'
+          ? '<span class="badge badge-success">启用</span>'
+          : '<span class="badge badge-fail">禁用</span>';
+        return `<tr>
+          <td>${m.name}</td>
+          <td><span style="font-family:monospace;color:#6B7280;">${m.icon}</span></td>
+          <td>${m.sort}</td>
+          <td><code style="background:#F3F4F6;padding:2px 6px;border-radius:4px;font-size:12px;">${m.code}</code></td>
+          <td><code style="background:#F3F4F6;padding:2px 6px;border-radius:4px;font-size:12px;">${m.path}</code></td>
+          <td>${statusHtml}</td>
+          <td style="font-size:12px;color:#6B7280;">${m.createTime}</td>
+          <td>
+            <a class="op-link">详情</a>
+            <a class="op-link warn">修改</a>
+            <a class="op-link danger">删除</a>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    // ========== 页面切换 ==========
+    function switchPage(page) {
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      document.getElementById('authPage').style.display = page === 'auth' ? '' : 'none';
+      document.getElementById('rolePage').style.display = page === 'role' ? '' : 'none';
+      document.getElementById('menuPage').style.display = page === 'menu' ? '' : 'none';
+
+      const titles = {
+        auth: { title: '认证管理', subtitle: '查看和管理用户的认证与实名记录' },
+        role: { title: '角色管理', subtitle: '管理系统角色和权限' },
+        menu: { title: '菜单管理', subtitle: '管理系统菜单和功能权限' }
+      };
+      const t = titles[page];
+      if (t) {
+        document.getElementById('pageTitle').textContent = t.title;
+        document.getElementById('pageSubtitle').textContent = t.subtitle;
+      }
+
+      if (page === 'role') renderRoleTable(mockRoles);
+      if (page === 'menu') renderMenuTable();
+    }
+  </script>
+</body>
+</html>
