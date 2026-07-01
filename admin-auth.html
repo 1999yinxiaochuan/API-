@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -293,6 +293,9 @@
     .type-badge.type-system { background: #F3F4F6; color: #374151; }
     .type-badge.type-error { background: #FEE2E2; color: #DC2626; }
     .type-badge.type-refund { background: #FDF2F8; color: #BE185D; }
+    .wallet-badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; }
+    .wallet-badge.recharge { background: #EFF6FF; color: #1D4ED8; }
+    .wallet-badge.equity { background: #FDF2F8; color: #BE185D; }
     
     .time-badge.warning { background: #FEF3C7; color: #92400E; }
     .time-badge.error { background: #FEE2E2; color: #DC2626; }
@@ -557,7 +560,77 @@
     .table-btn.chat-btn { background: #ECFDF5; color: #065F46; }
     .table-btn.more-btn { padding: 5px 8px; font-size: 10px; }
     .table-btn.danger-btn { background: #FEF2F2; color: #DC2626; }
-    .tokens-pagination { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: white; border: 1px solid #E5E7EB; border-radius: 10px; }
+    .table-btn.enable-btn { background: #ECFDF5; color: #065F46; }
+    .table-btn.edit-btn { background: #EFF6FF; color: #1D4ED8; }
+    .status-badge.disabled { background: #FEE2E2; color: #DC2626; }
+    .enable-btn-active { color: #10B981 !important; }
+    .token-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1400; }
+    .token-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 620px; max-height: 90vh; background: white; border-radius: 12px; z-index: 1401; display: none; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .token-modal.token-modal-open { display: flex; }
+    .token-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #E5E7EB; }
+    .token-modal-title-wrap { display: flex; align-items: center; gap: 8px; }
+    .token-modal-tag { display: inline-block; font-size: 12px; font-weight: 500; color: #10B981; background: #ECFDF5; padding: 2px 8px; border-radius: 10px; }
+    .token-modal-header h3 { font-size: 16px; font-weight: 600; color: #1F2937; margin: 0; }
+    .token-modal-close { background: none; border: none; font-size: 22px; color: #9CA3AF; cursor: pointer; line-height: 1; }
+    .token-modal-close:hover { color: #6B7280; }
+    .token-modal-body { padding: 20px 24px; overflow-y: auto; flex: 1; }
+    .token-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; }
+    .token-form-row { display: flex; gap: 16px; align-items: flex-end; margin-bottom: 12px; }
+    .token-form-item-flex { flex: 1; }
+    .token-form-item-quick { flex-shrink: 0; }
+    .token-form-item { margin-bottom: 0; }
+    .token-form-label { display: block; font-size: 13px; font-weight: 500; color: #374151; margin-bottom: 6px; }
+    .token-form-label .required { color: #EF4444; margin-left: 2px; }
+    .token-form-sub { font-size: 12px; font-weight: 400; color: #9CA3AF; margin-left: 4px; }
+    .token-form-input { width: 100%; padding: 9px 12px; border: 1px solid #E5E7EB; border-radius: 8px; font-size: 13px; color: #374151; outline: none; transition: border-color 0.2s; box-sizing: border-box; background: white; }
+    .token-form-input:focus { border-color: #10B981; }
+    .token-form-input::placeholder { color: #9CA3AF; }
+    .token-form-input[readonly] { background: #F9FAFB; color: #6B7280; }
+    .token-form-select { width: 100%; padding: 9px 12px; border: 1px solid #E5E7EB; border-radius: 8px; font-size: 13px; color: #374151; outline: none; transition: border-color 0.2s; box-sizing: border-box; background: white; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+    .token-form-select:focus { border-color: #10B981; }
+    .token-form-textarea { width: 100%; padding: 9px 12px; border: 1px solid #E5E7EB; border-radius: 8px; font-size: 13px; color: #374151; outline: none; transition: border-color 0.2s; box-sizing: border-box; background: white; resize: vertical; min-height: 80px; font-family: inherit; }
+    .token-form-textarea:focus { border-color: #10B981; }
+    .token-form-textarea::placeholder { color: #9CA3AF; }
+    .token-form-hint { font-size: 12px; color: #9CA3AF; margin: 6px 0 0 0; line-height: 1.4; }
+    .token-form-desc { font-size: 12px; color: #9CA3AF; margin: 4px 0 0 0; line-height: 1.4; }
+    .token-form-divider { height: 1px; background: #F3F4F6; margin: 16px 0; }
+    .token-expire-quick { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .expire-quick-label { font-size: 12px; color: #6B7280; font-weight: 400; margin-right: 2px; }
+    .expire-quick-btn { padding: 4px 10px; border: 1px solid #E5E7EB; background: white; border-radius: 6px; font-size: 12px; color: #6B7280; cursor: pointer; line-height: 1.4; }
+    .expire-quick-btn:hover { border-color: #10B981; color: #10B981; }
+    .expire-quick-btn.active { color: #10B981; border-color: #10B981; background: #ECFDF5; font-weight: 500; }
+    .token-expire-input-wrap { position: relative; }
+    .token-expire-input { padding-right: 36px; }
+    .token-expire-calendar { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; color: #9CA3AF; pointer-events: none; }
+    .token-amount-wrap { position: relative; }
+    .token-amount-prefix { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; color: #6B7280; pointer-events: none; }
+    .token-amount-input { padding-left: 28px; -moz-appearance: textfield; }
+    .token-amount-input::-webkit-outer-spin-button, .token-amount-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .token-switch-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 12px 0; }
+    .token-switch-inline { display: flex; align-items: center; gap: 10px; height: 38px; }
+    .token-switch-label { font-size: 13px; font-weight: 500; color: #374151; margin: 0; }
+    .token-modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 24px; border-top: 1px solid #E5E7EB; }
+    .token-btn-submit { display: flex; align-items: center; gap: 6px; padding: 9px 20px; background: #10B981; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; color: white; cursor: pointer; }
+    .token-btn-submit:hover { background: #059669; }
+    .token-btn-cancel { display: flex; align-items: center; gap: 6px; padding: 9px 20px; background: white; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 13px; font-weight: 600; color: #374151; cursor: pointer; }
+    .token-btn-cancel:hover { background: #F9FAFB; }
+    .token-delete-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 420px; background: white; border-radius: 12px; z-index: 1401; display: none; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .token-delete-modal.token-modal-open { display: flex; }
+    .token-delete-icon { width: 40px; height: 40px; border-radius: 50%; background: #FEE2E2; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .token-delete-btn { padding: 9px 20px; background: #EF4444; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; color: white; cursor: pointer; }
+    .token-delete-btn:hover { background: #DC2626; }
+        .token-agent-select-wrap { position: relative; }
+    .token-agent-input { padding-right: 32px !important; }
+    .token-agent-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; max-height: 220px; overflow-y: auto; background: white; border: 1px solid #E5E7EB; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 1500; margin-top: 4px; }
+    .token-agent-dropdown.show { display: block; }
+    .token-agent-option { padding: 10px 14px; cursor: pointer; font-size: 13px; color: #374151; border-bottom: 1px solid #F3F4F6; }
+    .token-agent-option:hover { background: #ECFDF5; }
+    .token-agent-option:last-child { border-bottom: none; }
+    .token-agent-option .agent-id { font-family: monospace; font-size: 12px; color: #6B7280; margin-left: 8px; }
+    .token-agent-option .agent-name { font-weight: 500; }
+    .token-agent-option.no-result { color: #9CA3AF; cursor: default; text-align: center; }
+    .token-agent-option.no-result:hover { background: white; }
+.tokens-pagination { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: white; border: 1px solid #E5E7EB; border-radius: 10px; }
     .pagination-info { font-size: 13px; color: #6B7280; }
     .pagination-controls { display: flex; align-items: center; gap: 8px; }
     .pagination-text { font-size: 13px; color: #6B7280; margin-right: 8px; }
@@ -774,19 +847,44 @@
         <a class="nav-item" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/UZ8r0fZVoj?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>代理管理
         </a>
-        <div class="nav-item" onclick="switchPage('employee')">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>平台员工管理
-        </div>
-        <div class="nav-item" onclick="switchPage('enterprise')">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>企业管理
-        </div>
+      </div>
+
+      <div class="nav-section-title">企业管理</div>
+      <div class="nav-group">
+        <a class="nav-item" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/YeiNZ6AfI/DwBeGoAU9O?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>企业列表
+        </a>
+        <a class="nav-item" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/YeiNZ6AfI/77HOH3vQQE?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>企业员工管理
+        </a>
       </div>
 
       <div class="nav-section-title">财务管理</div>
       <div class="nav-group">
-        <div class="nav-item" onclick="switchPage('finance')">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>财务管理
-        </div>
+        <a class="nav-item" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/YeiNZ6AfI/fjE764Q6bn?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>充值账单
+        </a>
+        <a class="nav-item" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/YeiNZ6AfI/fu3Jx_hp0a?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>发票管理
+        </a>
+        <a class="nav-item" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/gwehD3ofmBc?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>收益明细
+        </a>
+        <a class="nav-item" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/rt9qu5vHwqc?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><circle cx="18" cy="15" r="3"/><path d="M20.2 18.36L22 20l-2 1.5"/></svg>代理商资金
+        </a>
+        <a class="nav-item" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/bGNDG0KbRWj?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>调账记录
+        </a>
+        <a class="nav-item" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/A_aTkQ3CGo4?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/></svg>代理商账务流水
+        </a>
+        <a class="nav-item" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/2hV4h6o_2uh?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>用户账务流水
+        </a>
+        <a class="nav-item" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/mnKeDMlbEt-?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="12 5 12 19"/><polyline points="5 12 12 19 19 12"/><path d="M17 2H6a2 2 0 0 0-2 2v2h16V4a2 2 0 0 0-2-2z"/></svg>提现记录
+        </a>
       </div>
 
       <div class="nav-section-title">运营中心</div>
@@ -806,6 +904,9 @@
         </div>
         <div class="nav-item" onclick="switchPage('role')">
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>角色管理
+        </div>
+        <div class="nav-item" onclick="switchPage('employee')">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>平台员工管理
         </div>
         <div class="nav-item" onclick="switchPage('menu')">
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>菜单管理
@@ -1072,7 +1173,7 @@
           <button class="search-btn" style="background:#F3F4F6;color:#4B5563;" onclick="clearEmployeeSearch()">清空</button>
         </div>
         <div style="margin-bottom:16px;">
-          <button class="search-btn" style="background:#10B981;">+ 新增员工</button>
+          <button class="search-btn" style="background:#10B981;" onclick="showAddEmployeeModal()">+ 新增员工</button>
         </div>
         <div class="table-container">
           <table>
@@ -1113,6 +1214,81 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- 新增/编辑员工弹窗 -->
+      <div class="modal-overlay" id="employeeModalOverlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1400;" onclick="hideEmployeeModal()"></div>
+      <div class="user-modal" id="employeeModal" style="display:none;">
+        <div class="user-modal-header">
+          <div class="user-modal-title-wrap">
+            <span class="user-modal-tag" id="employeeModalTag">新建</span>
+            <h3 id="employeeModalTitle">新增员工</h3>
+          </div>
+          <button class="user-modal-close" onclick="hideEmployeeModal()">×</button>
+        </div>
+        <div class="user-modal-body">
+          <div class="user-section">
+            <div class="user-section-header">
+              <div class="user-section-icon green">👤</div>
+              <div class="user-section-text">
+                <h4>员工信息</h4>
+                <p>填写员工的基本信息</p>
+              </div>
+            </div>
+            <div class="user-form-item">
+              <label class="user-form-label">员工姓名 <span class="required">*</span></label>
+              <input type="text" class="user-form-input" id="employeeName" placeholder="请输入员工姓名">
+            </div>
+            <div class="user-form-item">
+              <label class="user-form-label">手机号码 <span class="required">*</span></label>
+              <input type="text" class="user-form-input" id="employeePhone" placeholder="请输入手机号码">
+            </div>
+            <div class="user-form-item">
+              <label class="user-form-label">角色权限 <span class="required">*</span></label>
+              <select class="user-form-select" id="employeeRole">
+                <option value="">请选择角色权限</option>
+                <option value="管理员(平台)">管理员(平台)</option>
+                <option value="客服主管(平台)">客服主管(平台)</option>
+                <option value="客服(平台)">客服(平台)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="user-modal-footer">
+          <button class="user-modal-btn cancel" onclick="hideEmployeeModal()">取消</button>
+          <button class="user-modal-btn submit" onclick="submitEmployee()">提交</button>
+        </div>
+      </div>
+
+      <!-- 删除员工确认弹窗 -->
+      <div class="modal-overlay" id="deleteEmployeeModalOverlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1400;" onclick="hideDeleteEmployeeModal()"></div>
+      <div class="user-modal" id="deleteEmployeeModal" style="display:none;max-width:420px;">
+        <div class="user-modal-header">
+          <div class="user-modal-title-wrap">
+            <span class="user-modal-tag" style="color:#DC2626;background:#FEE2E2;">删除</span>
+            <h3>删除确认</h3>
+          </div>
+          <button class="user-modal-close" onclick="hideDeleteEmployeeModal()">×</button>
+        </div>
+        <div class="user-modal-body">
+          <div style="display:flex;align-items:flex-start;gap:12px;padding:8px 0;">
+            <div style="width:40px;height:40px;border-radius:50%;background:#FEE2E2;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+            <div>
+              <p style="font-size:14px;color:#1F2937;margin-bottom:6px;font-weight:500;">确定要删除该员工吗？</p>
+              <p style="font-size:13px;color:#6B7280;line-height:1.6;">员工 <span id="deleteEmployeeName" style="font-weight:500;color:#374151;"></span> 的所有相关信息将被永久删除，此操作不可恢复。</p>
+            </div>
+          </div>
+        </div>
+        <div class="user-modal-footer">
+          <button class="user-modal-btn cancel" onclick="hideDeleteEmployeeModal()">取消</button>
+          <button class="user-modal-btn" style="background:#EF4444;color:white;" onclick="confirmDeleteEmployee()">确认删除</button>
         </div>
       </div>
 
@@ -1319,17 +1495,23 @@
                 <tbody>
                   <tr>
                     <td class="actions-col">
-                      <button class="table-btn danger-btn">禁用</button>
+                      <button class="table-btn enable-btn" onclick="toggleTokenStatus(0, this)">禁用</button>
+                      <button class="table-btn edit-btn" onclick="openTokenEditModal(0)">编辑</button>
+                      <button class="table-btn danger-btn" onclick="showDeleteTokenModal(0)">删除</button>
                     </td>
                   </tr>
                   <tr>
                     <td class="actions-col">
-                      <button class="table-btn danger-btn">禁用</button>
+                      <button class="table-btn enable-btn" onclick="toggleTokenStatus(1, this)">禁用</button>
+                      <button class="table-btn edit-btn" onclick="openTokenEditModal(1)">编辑</button>
+                      <button class="table-btn danger-btn" onclick="showDeleteTokenModal(1)">删除</button>
                     </td>
                   </tr>
                   <tr>
                     <td class="actions-col">
-                      <button class="table-btn danger-btn">禁用</button>
+                      <button class="table-btn enable-btn" onclick="toggleTokenStatus(2, this)">禁用</button>
+                      <button class="table-btn edit-btn" onclick="openTokenEditModal(2)">编辑</button>
+                      <button class="table-btn danger-btn" onclick="showDeleteTokenModal(2)">删除</button>
                     </td>
                   </tr>
                 </tbody>
@@ -1340,11 +1522,11 @@
             <div class="pagination-info">显示第 1 条 - 第 3 条, 共 3 条</div>
             <div class="pagination-controls">
               <span class="pagination-text">总页数: 1</span>
-              <button class="pagination-btn disabled">‹</button>
-              <button class="pagination-btn disabled">‹‹</button>
+              <button class="pagination-btn disabled">&#8249;</button>
+              <button class="pagination-btn disabled">&#8249;&#8249;</button>
               <button class="pagination-btn active">1</button>
-              <button class="pagination-btn disabled">››</button>
-              <button class="pagination-btn disabled">›</button>
+              <button class="pagination-btn disabled">&#8250;&#8250;</button>
+              <button class="pagination-btn disabled">&#8250;</button>
               <div class="pagination-select">
                 <span>每页条数:</span>
                 <select>
@@ -1359,7 +1541,121 @@
         </div>
       </div>
 
-      <!-- 使用日志 -->
+      <!-- 令牌编辑弹窗 -->
+      <div class="token-modal-overlay" id="tokenEditModalOverlay" style="display:none;" onclick="closeTokenEditModal()"></div>
+      <div class="token-modal" id="tokenEditModal">
+        <div class="token-modal-header">
+          <div class="token-modal-title-wrap">
+            <span class="token-modal-tag" id="tokenEditModalTag" style="color:#F59E0B;background:#FFFBEB;">编辑</span>
+            <h3 id="tokenEditModalTitle">编辑令牌</h3>
+          </div>
+          <button class="token-modal-close" onclick="closeTokenEditModal()">&times;</button>
+        </div>
+        <div class="token-modal-body">
+          <div class="token-form-item">
+            <label class="token-form-label">名称<span class="required">*</span></label>
+            <input type="text" class="token-form-input" id="token-edit-name" placeholder="请输入名称">
+          </div>
+          <div class="token-form-divider"></div>
+          <div class="token-form-row">
+            <div class="token-form-item token-form-item-flex">
+              <label class="token-form-label">过期时间<span class="required">*</span></label>
+              <input type="datetime-local" class="token-form-input" id="token-edit-expire" step="1">
+            </div>
+            <div class="token-form-item token-form-item-quick">
+              <label class="token-form-label">&nbsp;</label>
+              <div class="token-expire-quick">
+                <button type="button" class="expire-quick-btn" data-expire="never" onclick="setTokenEditExpireQuick(this, 'never')">永不过期</button>
+                <button type="button" class="expire-quick-btn" data-expire="month" onclick="setTokenEditExpireQuick(this, 'month')">一个月</button>
+                <button type="button" class="expire-quick-btn" data-expire="day" onclick="setTokenEditExpireQuick(this, 'day')">一天</button>
+                <button type="button" class="expire-quick-btn" data-expire="hour" onclick="setTokenEditExpireQuick(this, 'hour')">一小时</button>
+              </div>
+            </div>
+          </div>
+          <div class="token-form-row">
+            <div class="token-form-item token-form-item-flex">
+              <label class="token-form-label">金额</label>
+              <div class="token-amount-wrap">
+                <span class="token-amount-prefix">&#165;</span>
+                <input type="number" class="token-form-input token-amount-input" id="token-edit-amount" value="0.000000" step="0.000001">
+              </div>
+            </div>
+            <div class="token-form-item token-form-item-quick">
+              <label class="token-form-label">&nbsp;</label>
+              <div class="token-switch-inline">
+                <label class="token-switch-label">无限额度</label>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="token-edit-unlimited" onchange="toggleTokenEditUnlimited(this.checked)">
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <p class="token-form-desc" style="margin-top:4px;">令牌的额度仅用于限制令牌本身的最大额度使用量，实际的使用受到账户的剩余额度限制</p>
+          <div class="token-form-divider"></div>
+          <div class="token-form-item">
+            <label class="token-form-label">模型限制列表</label>
+            <select class="token-form-select" id="token-edit-model-limit">
+              <option value="">请选择该令牌支持的模型，留空支持所有模型</option>
+              <option value="glm">GLM-5.1</option>
+              <option value="other">其他</option>
+            </select>
+            <p class="token-form-hint">非必要，不建议启用模型限制</p>
+          </div>
+          <div class="token-form-item">
+            <label class="token-form-label">IP白名单<span class="token-form-sub">(支持CIDR表达式)</span></label>
+            <textarea class="token-form-textarea" id="token-edit-ip-whitelist" placeholder="允许的IP，一行一个，不填写则不限制"></textarea>
+            <p class="token-form-hint">请勿过度信任此功能，IP可能被伪造，请配合nginx和cdn等网关使用</p>
+          </div>
+          <div class="token-form-divider"></div>
+          <div class="token-form-item">
+            <label class="token-form-label">所属代理商</label>
+            <div class="token-agent-select-wrap" id="token-edit-agent-wrap">
+              <input type="text" class="token-form-input token-agent-input" id="token-edit-agent-input" placeholder="搜索代理商ID或名称" autocomplete="off" oninput="filterTokenAgentOptions()" onfocus="showTokenAgentDropdown()" onblur="hideTokenAgentDropdown()">
+              <div class="token-agent-dropdown" id="token-edit-agent-dropdown"></div>
+            </div>
+          </div>
+        </div>
+        <div class="token-modal-footer">
+          <button class="token-btn-submit" onclick="submitTokenEdit()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>提交
+          </button>
+          <button class="token-btn-cancel" onclick="closeTokenEditModal()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>取消
+          </button>
+        </div>
+      </div>
+<!-- 令牌删除确认弹窗 -->
+      <div class="token-modal-overlay" id="tokenDeleteModalOverlay" style="display:none;" onclick="hideDeleteTokenModal()"></div>
+      <div class="token-delete-modal" id="tokenDeleteModal">
+        <div class="token-modal-header">
+          <div class="token-modal-title-wrap">
+            <span class="token-modal-tag" style="color:#DC2626;background:#FEE2E2;">删除</span>
+            <h3>删除确认</h3>
+          </div>
+          <button class="token-modal-close" onclick="hideDeleteTokenModal()">&times;</button>
+        </div>
+        <div class="token-modal-body">
+          <div style="display:flex;align-items:flex-start;gap:12px;padding:8px 0;">
+            <div class="token-delete-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+            <div>
+              <p style="font-size:14px;color:#1F2937;margin-bottom:6px;font-weight:500;">确定要删除该令牌吗？</p>
+              <p style="font-size:13px;color:#6B7280;line-height:1.6;">令牌 <span id="deleteTokenName" style="font-weight:500;color:#374151;"></span> 的所有相关信息将被永久删除，此操作不可恢复。</p>
+            </div>
+          </div>
+        </div>
+        <div class="token-modal-footer">
+          <button class="token-btn-cancel" onclick="hideDeleteTokenModal()">取消</button>
+          <button class="token-delete-btn" onclick="confirmDeleteToken()">确认删除</button>
+        </div>
+      </div>
+<!-- 使用日志 -->
       <div id="usagePage" style="display:none;">
         <div class="usage-logs-container">
           <!-- PRD浮动提示框 -->
@@ -1476,6 +1772,7 @@
                         <div class="header-tooltip">只有当用户设置开启IP记录时，才会进行请求和错误类型日志的IP记录</div>
                       </div>
                     </th>
+                    <th>钱包</th>
                     <th>详细</th>
                   </tr>
                 </thead>
@@ -1505,10 +1802,11 @@
                     <td><span class="input-output">48</span></td>
                     <td><span class="cost">¥0.020638</span></td>
                     <td>-</td>
+                    <td><span class="wallet-badge recharge">充值余额</span></td>
                     <td><span class="log-detail-text">分组倍率 1x<br>输入 ¥0.025 / 1M tokens<br>缓存读 ¥0.025 / 1M tokens</span></td>
                   </tr>
                   <tr class="log-detail-row" id="log-detail-0" style="display:none;">
-                    <td colspan="15">
+                    <td colspan="17">
                       <div class="log-detail-panel">
                         <div class="log-detail-header">
                           <div class="detail-channel-info">
@@ -1588,10 +1886,11 @@
                     <td>-</td>
                     <td><span class="cost cost-positive">+¥100.00</span></td>
                     <td>-</td>
+                    <td><span class="wallet-badge recharge">充值余额</span></td>
                     <td><span class="log-detail-text">管理员补单成功，充值金额: ¥500.000000，支付金额：425.000000</span></td>
                   </tr>
                   <tr class="log-detail-row" id="log-detail-1" style="display:none;">
-                    <td colspan="15">
+                    <td colspan="17">
                       <div class="log-detail-panel">
                         <div class="log-detail-body">
                           <div class="detail-row">
@@ -1643,10 +1942,11 @@
                     <td>-</td>
                     <td><span class="cost">¥0.00</span></td>
                     <td>-</td>
+                    <td>-</td>
                     <td><span class="log-detail-text">管理员覆盖用户额度从¥2.000000额度为¥10.000000额度</span></td>
                   </tr>
                   <tr class="log-detail-row" id="log-detail-2" style="display:none;">
-                    <td colspan="15">
+                    <td colspan="17">
                       <div class="log-detail-panel">
                         <div class="log-detail-body">
                           <div class="detail-row">
@@ -1686,10 +1986,11 @@
                     <td>-</td>
                     <td><span class="cost">¥0.00</span></td>
                     <td>-</td>
+                    <td>-</td>
                     <td><span class="log-detail-text">查看渠道密钥信息 (渠道ID: 8)或者成功启用两步验证</span></td>
                   </tr>
                   <tr class="log-detail-row" id="log-detail-3" style="display:none;">
-                    <td colspan="15">
+                    <td colspan="17">
                       <div class="log-detail-panel">
                         <div class="log-detail-body">
                           <div class="detail-row">
@@ -1728,10 +2029,11 @@
                     <td><span class="input-output">0</span></td>
                     <td><span class="cost">¥0.00</span></td>
                     <td>-</td>
+                    <td>-</td>
                     <td><span class="log-detail-text error">status_code=500,算法服务接口异常，请联系管理员</span></td>
                   </tr>
                   <tr class="log-detail-row" id="log-detail-4" style="display:none;">
-                    <td colspan="15">
+                    <td colspan="17">
                       <div class="log-detail-panel">
                         <div class="log-detail-body">
                           <div class="detail-row">
@@ -1779,10 +2081,11 @@
                     <td><span class="input-output">500</span></td>
                     <td><span class="cost cost-positive">+¥0.012500</span></td>
                     <td>-</td>
+                    <td><span class="wallet-badge recharge">充值余额</span></td>
                     <td><span class="log-detail-text">预收费1000token，当次消耗为500token，已退回500token</span></td>
                   </tr>
                   <tr class="log-detail-row" id="log-detail-5" style="display:none;">
-                    <td colspan="15">
+                    <td colspan="17">
                       <div class="log-detail-panel">
                         <div class="log-detail-header">
                           <div class="detail-channel-info">
@@ -2029,13 +2332,15 @@
               <button class="action-btn primary" onclick="showAddUserModal()">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>添加用户
               </button>
+              <button class="action-btn secondary" onclick="batchViewPhones()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>查看手机号</button>
               <button class="action-btn secondary" onclick="exportUserList()">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>导出
               </button>
             </div>
             <div class="user-stats">
-              <span class="stat-item"><span class="stat-label">剩余额度</span><span class="stat-value">¥1,234.56</span></span>
               <span class="stat-item"><span class="stat-label">总额度</span><span class="stat-value">¥5,678.90</span></span>
+              <span class="stat-item"><span class="stat-label">充值余额</span><span class="stat-value">¥3,456.78</span></span>
+              <span class="stat-item"><span class="stat-label">权益余额</span><span class="stat-value">¥1,234.56</span></span>
             </div>
           </div>
 
@@ -2103,7 +2408,9 @@
                     <th>手机号</th>
                     <th>状态</th>
                     <th>认证状态</th>
-                    <th>剩余额度/总额度</th>
+                    <th>总额度</th>
+                    <th>充值余额</th>
+                    <th>权益余额</th>
                     <th>邀请信息</th>
                     <th>所属代理ID</th>
                     <th>所属代理名称</th>
@@ -2120,12 +2427,13 @@
                     <td>iuqdof7i</td>
                     <td>
                       <span class="phone-masked">138****5621</span>
-                      <button class="view-phone-btn admin-only" onclick="viewPhone(this, '13812345621')">查看手机号</button>
                     </td>
                     <td><span class="badge badge-success">已启用</span></td>
                     <td><span class="badge badge-pending">未认证</span></td>
-                    <td>¥0.00 / ¥0.00</td>
-                    <td>邀请: 0 收益: ¥0.00 无邀请人</td>
+                    <td>¥0.00</td>
+                                        <td>¥0.00</td>
+                                        <td>¥0.00</td>
+                                        <td>邀请: 0 收益: ¥0.00 无邀请人</td>
                     <td>AG001</td>
                     <td>星辰科技有限公司</td>
                     <td>156</td>
@@ -2154,11 +2462,12 @@
                     <td>sz1f83ps</td>
                     <td>
                       <span class="phone-masked">139****8821</span>
-                      <button class="view-phone-btn admin-only" onclick="viewPhone(this, '13912348821')">查看手机号</button>
                     </td>
                     <td><span class="badge badge-success">已启用</span></td>
                     <td><span class="badge badge-success">已认证</span></td>
-                    <td>¥120.50 / ¥500.00</td>
+                    <td>¥500.00</td>
+                                        <td>¥80.50</td>
+                                        <td>¥40.00</td>
                     <td>邀请: 2 收益: ¥15.80 邀请人: zhangsan</td>
                     <td>AG003</td>
                     <td>张伟</td>
@@ -2187,11 +2496,12 @@
                     <td>eigv23wd</td>
                     <td>
                       <span class="phone-masked">136****7733</span>
-                      <button class="view-phone-btn admin-only" onclick="viewPhone(this, '13612347733')">查看手机号</button>
                     </td>
                     <td><span class="badge badge-fail">已禁用</span></td>
                     <td><span class="badge badge-pending">未认证</span></td>
-                    <td>¥0.00 / ¥100.00</td>
+                    <td>¥100.00</td>
+                                        <td>¥0.00</td>
+                                        <td>¥0.00</td>
                     <td>邀请: 0 收益: ¥0.00 无邀请人</td>
                     <td>-</td>
                     <td>-</td>
@@ -2221,11 +2531,12 @@
                     <td>lrdpew4g</td>
                     <td>
                       <span class="phone-masked">137****9944</span>
-                      <button class="view-phone-btn admin-only" onclick="viewPhone(this, '13712349944')">查看手机号</button>
                     </td>
                     <td><span class="badge badge-success">已启用</span></td>
                     <td><span class="badge badge-success">已认证</span></td>
-                    <td>¥890.00 / ¥1,000.00</td>
+                    <td>¥1,000.00</td>
+                                        <td>¥700.00</td>
+                                        <td>¥190.00</td>
                     <td>邀请: 5 收益: ¥120.00 邀请人: lisi</td>
                     <td>AG002</td>
                     <td>王明</td>
@@ -2302,6 +2613,10 @@
                 <input type="text" class="user-form-input" id="addUserName" placeholder="请输入用户名">
               </div>
               <div class="user-form-item">
+                <label class="user-form-label">手机号码</label>
+                <input type="text" class="user-form-input" id="addUserPhone" placeholder="请输入手机号码">
+              </div>
+              <div class="user-form-item">
                 <label class="user-form-label">显示名称</label>
                 <input type="text" class="user-form-input" id="addUserDisplayName" placeholder="请输入显示名称">
               </div>
@@ -2343,6 +2658,10 @@
               <div class="user-form-item">
                 <label class="user-form-label">用户名 <span class="required">*</span></label>
                 <input type="text" class="user-form-input" id="editUserName" value="iuqdof7i">
+              </div>
+              <div class="user-form-item">
+                <label class="user-form-label">手机号码</label>
+                <input type="text" class="user-form-input" id="editUserPhone" value="13812345621" placeholder="请输入手机号码">
               </div>
               <div class="user-form-item">
                 <label class="user-form-label">密码</label>
@@ -2696,38 +3015,7 @@
                       <th>今日token数</th>
                     </tr>
                   </thead>
-                  <tbody id="statsTableBody">
-                    <tr>
-                      <td>2023-11-30</td>
-                      <td></td>
-                      <td></td>
-                      <td>个人</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td>2023-11-30</td>
-                      <td></td>
-                      <td></td>
-                      <td>个人</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
+                  <tbody id="statsTableBody"></tbody>
                 </table>
               </div>
             </div>
@@ -2737,23 +3025,57 @@
 
       <!-- 企业管理 -->
       <div id="enterprisePage" style="display:none;">
-        <div class="finance-tab-bar">
-          <a class="finance-tab" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/YeiNZ6AfI/DwBeGoAU9O?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">企业列表</a>
-          <a class="finance-tab" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/YeiNZ6AfI/77HOH3vQQE?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">企业员工管理</a>
+        <div style="padding:40px 24px;text-align:center;">
+          <div style="width:80px;height:80px;background:#ECFDF5;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          </div>
+          <h2 style="font-size:18px;color:#1F2937;margin:0 0 8px;">企业管理</h2>
+          <p style="font-size:14px;color:#6B7280;margin:0 0 24px;">请在左侧菜单栏选择具体的企业管理功能</p>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:500px;margin:0 auto;">
+            <a href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/YeiNZ6AfI/DwBeGoAU9O?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank" style="padding:20px;background:white;border:1px solid #E5E7EB;border-radius:8px;text-decoration:none;color:#374151;transition:all 0.2s;">
+              <div style="font-size:14px;font-weight:500;">企业列表</div>
+            </a>
+            <a href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/YeiNZ6AfI/77HOH3vQQE?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank" style="padding:20px;background:white;border:1px solid #E5E7EB;border-radius:8px;text-decoration:none;color:#374151;transition:all 0.2s;">
+              <div style="font-size:14px;font-weight:500;">企业员工管理</div>
+            </a>
+          </div>
         </div>
       </div>
 
       <!-- 财务管理 -->
       <div id="financePage" style="display:none;">
-        <div class="finance-tab-bar">
-          <a class="finance-tab" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/YeiNZ6AfI/fjE764Q6bn?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">充值账单</a>
-          <a class="finance-tab" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/YeiNZ6AfI/fu3Jx_hp0a?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">发票管理</a>
-          <a class="finance-tab" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/gwehD3ofmBc?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">收益明细</a>
-          <a class="finance-tab" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/rt9qu5vHwqc?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">代理商资金</a>
-          <a class="finance-tab" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/bGNDG0KbRWj?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">调账记录</a>
-          <a class="finance-tab" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/A_aTkQ3CGo4?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">代理商账务流水</a>
-          <a class="finance-tab" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/2hV4h6o_2uh?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">用户账务流水</a>
-          <a class="finance-tab" href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/mnKeDMlbEt-?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank">提现记录</a>
+        <div style="padding:40px 24px;text-align:center;">
+          <div style="width:80px;height:80px;background:#ECFDF5;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <h2 style="font-size:18px;color:#1F2937;margin:0 0 8px;">财务管理</h2>
+          <p style="font-size:14px;color:#6B7280;margin:0 0 24px;">请在左侧菜单栏选择具体的财务管理功能</p>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:800px;margin:0 auto;">
+            <a href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/YeiNZ6AfI/fjE764Q6bn?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank" style="padding:20px;background:white;border:1px solid #E5E7EB;border-radius:8px;text-decoration:none;color:#374151;transition:all 0.2s;">
+              <div style="font-size:14px;font-weight:500;">充值账单</div>
+            </a>
+            <a href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/YeiNZ6AfI/fu3Jx_hp0a?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank" style="padding:20px;background:white;border:1px solid #E5E7EB;border-radius:8px;text-decoration:none;color:#374151;transition:all 0.2s;">
+              <div style="font-size:14px;font-weight:500;">发票管理</div>
+            </a>
+            <a href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/gwehD3ofmBc?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank" style="padding:20px;background:white;border:1px solid #E5E7EB;border-radius:8px;text-decoration:none;color:#374151;transition:all 0.2s;">
+              <div style="font-size:14px;font-weight:500;">收益明细</div>
+            </a>
+            <a href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/rt9qu5vHwqc?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank" style="padding:20px;background:white;border:1px solid #E5E7EB;border-radius:8px;text-decoration:none;color:#374151;transition:all 0.2s;">
+              <div style="font-size:14px;font-weight:500;">代理商资金</div>
+            </a>
+            <a href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/bGNDG0KbRWj?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank" style="padding:20px;background:white;border:1px solid #E5E7EB;border-radius:8px;text-decoration:none;color:#374151;transition:all 0.2s;">
+              <div style="font-size:14px;font-weight:500;">调账记录</div>
+            </a>
+            <a href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/A_aTkQ3CGo4?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank" style="padding:20px;background:white;border:1px solid #E5E7EB;border-radius:8px;text-decoration:none;color:#374151;transition:all 0.2s;">
+              <div style="font-size:14px;font-weight:500;">代理商账务流水</div>
+            </a>
+            <a href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/2hV4h6o_2uh?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank" style="padding:20px;background:white;border:1px solid #E5E7EB;border-radius:8px;text-decoration:none;color:#374151;transition:all 0.2s;">
+              <div style="font-size:14px;font-weight:500;">用户账务流水</div>
+            </a>
+            <a href="https://app.mockplus.cn/run/prototype/Zm9Z7RE00x/poP7Kzv6q/mnKeDMlbEt-?allowShare=1&cps=expand&ha=1&isShare=false&sr=collapse" target="_blank" style="padding:20px;background:white;border:1px solid #E5E7EB;border-radius:8px;text-decoration:none;color:#374151;transition:all 0.2s;">
+              <div style="font-size:14px;font-weight:500;">提现记录</div>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -3071,30 +3393,28 @@
       const body = document.getElementById('popoverBody');
       body.innerHTML = '';
 
-      body.insertAdjacentHTML('beforeend', `
-        <div class="popover-section">
+      body.insertAdjacentHTML('beforeend', `<div class="popover-section">
           <div class="pop-label">字段说明</div>
           <div class="pop-value">${def.desc}</div>
-        </div>
-      `);
-      body.insertAdjacentHTML('beforeend', `
-        <div class="popover-section">
+        </div>                    `);
+      body.insertAdjacentHTML('beforeend', 
+                    
+        `<div class="popover-section">
           <div class="pop-label">数据类型</div>
           <div class="pop-value">${def.type}</div>
-        </div>
-      `);
-      body.insertAdjacentHTML('beforeend', `
-        <div class="popover-section">
+        </div>                    `);
+      body.insertAdjacentHTML('beforeend', 
+                    
+        `<div class="popover-section">
           <div class="pop-label">数据格式</div>
           <div class="pop-value code">${def.format}</div>
-        </div>
-      `);
-      body.insertAdjacentHTML('beforeend', `
-        <div class="popover-section">
+        </div>                    `);
+      body.insertAdjacentHTML('beforeend', 
+                    
+        `<div class="popover-section">
           <div class="pop-label">示例</div>
           <div class="pop-value"><span class="example">${def.example}</span></div>
-        </div>
-      `);
+        </div>                    `);
 
       document.getElementById('popover').classList.add('active');
       document.getElementById('popoverOverlay').classList.add('active');
@@ -3124,8 +3444,9 @@
       const body = document.getElementById('auditBody');
       const data = record.submittedData;
 
-      let html = `
-        <div class="audit-section">
+      let html = 
+                    
+        `<div class="audit-section">
           <h4>企业/代理商基本信息</h4>
           <div class="audit-grid">
             <div class="audit-item"><div class="label">企业名称</div><div class="value">${data.companyName || '-'}</div></div>
@@ -3134,19 +3455,24 @@
             <div class="audit-item"><div class="label">法人身份证号</div><div class="value">${data.legalPersonId ? data.legalPersonId.replace(/(\d{6})\d{8}(\d{4})/,'$1********$2') : '-'}</div></div>
             <div class="audit-item"><div class="label">企业地址</div><div class="value">${data.companyAddress || '-'}</div></div>
             <div class="audit-item"><div class="label">企业电话</div><div class="value">${data.companyPhone || '-'}</div></div>
-      `;
+      
+                    `;
 
       if (record.type === 'agent') {
-        html += `
-            <div class="audit-item"><div class="label">代理商级别</div><div class="value">${data.agentLevel || '-'}</div></div>
+        html += 
+                    
+            `<div class="audit-item"><div class="label">代理商级别</div><div class="value">${data.agentLevel || '-'}</div></div>
             <div class="audit-item"><div class="label">代理区域</div><div class="value">${data.agentArea || '-'}</div></div>
-        `;
+        
+                    `;
       }
 
-      html += `
-          </div>
+      html += 
+                    
+          `</div>
         </div>
-      `;
+      
+                    `;
 
       if (false) {
         // 对公账户信息已移除（企业认证不再使用对公打款方式）
@@ -3154,27 +3480,39 @@
 
       const hasImages = data.licenseImg || data.idCardImg || data.idCardBackImg || data.licenseBackImg || data.bankLicenseImg;
       if (hasImages) {
-        html += `
-          <div class="audit-section">
+        html += 
+                    
+          `<div class="audit-section">
             <h4>上传证件图片</h4>
             <div class="audit-images">
-        `;
+        
+                    `
         if (data.licenseImg) {
-          html += `<img src="${data.licenseImg}" class="audit-image" title="营业执照" />`;
+          html += 
+                    `<img src="${data.licenseImg}" class="audit-image" title="营业执照" />
+                    `;
         }
         if (data.idCardImg) {
-          html += `<img src="${data.idCardImg}" class="audit-image" title="法人身份证正面" />`;
+          html += 
+                    `<img src="${data.idCardImg}" class="audit-image" title="法人身份证正面" />
+                    `;
         }
         if (data.idCardBackImg || data.licenseBackImg) {
-          html += `<img src="${data.idCardBackImg || data.licenseBackImg}" class="audit-image" title="法人身份证反面" />`;
+          html += 
+                    `<img src="${data.idCardBackImg || data.licenseBackImg}" class="audit-image" title="法人身份证反面" />
+                    `;
         }
         if (data.bankLicenseImg) {
-          html += `<img src="${data.bankLicenseImg}" class="audit-image" title="开户许可证" />`;
+          html += 
+                    `<img src="${data.bankLicenseImg}" class="audit-image" title="开户许可证" />
+                    `;
         }
-        html += `
-            </div>
+        html += 
+                    
+            `</div>
           </div>
-        `;
+        
+                    `;
       }
 
       body.innerHTML = html;
@@ -3440,7 +3778,8 @@
         // 代理商认证不需要审核，pending 状态直接显示为成功
         const displayStatus = (item.type === 'agent' && s === 'pending') ? 'success' : s;
         const statusHtml = displayStatus === 'success' ? '<span class="badge badge-success">成功</span>'
-          : displayStatus === 'fail' ? `<span class="badge badge-fail">失败${item.failReason ? '：'+item.failReason : ''}</span>`
+          : displayStatus === 'fail' ? 
+                    `<span class="badge badge-fail">失败${item.failReason ? '：'+item.failReason : ''}</span>`
           : '<span class="badge badge-pending">待审核</span>';
         const typeHtml = item.type === 'personal'
           ? '<span class="type-tag type-personal">个人认证</span>'
@@ -3468,7 +3807,7 @@
           <td colspan="9"><div class="detail-box">${buildAuthDetail(item)}</div></td>
         </tr>`;
       }).join('');
-      pageInfo.textContent = `共 ${data.length} 条记录`;
+      pageInfo.textContent = `共 ${data.length} 条记`;
     }
 
     function renderRealnameTable(data) {
@@ -3533,33 +3872,43 @@
 
       // 添加 info icon 辅助函数
       function labelWithInfo(text) {
-        return `<span class="label">${text}</span>`;
+        return 
+                    `<span class="label">${text}</span>
+                    `;
       }
 
-      let html = `<div class="detail-section"><h4>提交资料信息</h4><div class="detail-grid">`;
+      let html = 
+                    `<div class="detail-section"><h4>提交资料信息</h4><div class="detail-grid">
+                    `;
 
       if (item.type === 'personal') {
-        html += `
-          <div class="detail-item">${labelWithInfo('真实姓名')}<span class="value">${d.name || empty}</span></div>
+        html += 
+                    
+          `<div class="detail-item">${labelWithInfo('真实姓名')}<span class="value">${d.name || empty}</span></div>
           <div class="detail-item">${labelWithInfo('证件类型')}<span class="value">${d.idType || empty}</span></div>
           <div class="detail-item">${labelWithInfo('身份证号码')}<span class="value">${d.idCard || empty}</span></div>
           <div class="detail-item">${labelWithInfo('手机号码')}<span class="value">${d.phone || empty}</span></div>
           <div class="detail-item">${labelWithInfo('联系地址')}<span class="value">${d.address || empty}</span></div>
           <div class="detail-item">${labelWithInfo('认证方式')}<span class="value">${item.method}</span></div>
-        `;
+        
+                    `;
       } else {
-        html += `
-          <div class="detail-item">${labelWithInfo('企业名称')}<span class="value">${d.companyName || empty}</span></div>
+        html += 
+                    
+          `<div class="detail-item">${labelWithInfo('企业名称')}<span class="value">${d.companyName || empty}</span></div>
           <div class="detail-item">${labelWithInfo('统一社会信用代码')}<span class="value">${d.creditCode || empty}</span></div>
           <div class="detail-item">${labelWithInfo('法定代表人姓名')}<span class="value">${d.legalPersonName || empty}</span></div>
           <div class="detail-item">${labelWithInfo('法定代表人身份证')}<span class="value">${d.legalPersonId || empty}</span></div>
           <div class="detail-item">${labelWithInfo('企业地址')}<span class="value">${d.companyAddress || empty}</span></div>
           <div class="detail-item">${labelWithInfo('企业联系电话')}<span class="value">${d.companyPhone || empty}</span></div>
           <div class="detail-item">${labelWithInfo('认证方式')}<span class="value">${item.method}</span></div>
-        `;
+        
+                    `;
       }
 
-      html += `</div></div>`;
+      html += 
+                    `</div></div>
+                    `;
 
       // 图片资料
       const imgs = [];
@@ -3573,12 +3922,18 @@
         function getInfoIcon(labelText) {
           return '';
         }
-        html += `<div class="detail-section"><h4>${labelWithInfo('证件图片')}</h4><div style="display:flex;gap:12px;flex-wrap:wrap;">`;
+        html += 
+                    `<div class="detail-section"><h4>${labelWithInfo('证件图片')}</h4><div style="display:flex;gap:12px;flex-wrap:wrap;">
+                    `;
         imgs.forEach(img => {
           const imgLabel = img.label;
-          html += `<div><img class="img-preview" src="${img.src}" alt="${img.label}" title="${img.label}"><div style="font-size:11px;color:#9CA3AF;text-align:center;margin-top:4px;">${imgLabel} ${getInfoIcon(imgLabel)}</div></div>`;
+          html += 
+                    `<div><img class="img-preview" src="${img.src}" alt="${img.label}" title="${img.label}"><div style="font-size:11px;color:#9CA3AF;text-align:center;margin-top:4px;">${imgLabel} ${getInfoIcon(imgLabel)}</div></div>
+                    `;
         });
-        html += `</div></div>`;
+        html += 
+                    `</div></div>
+                    `;
       }
 
       // 对公打款特有信息（已移除，企业认证不再使用对公打款方式）
@@ -3588,7 +3943,9 @@
 
       // 失败原因
       if (item.status === 'fail' && item.failReason) {
-        html += `<div class="detail-section"><h4>${labelWithInfo('失败原因')}</h4><p style="color:#EF4444;font-size:13px;">${item.failReason}</p></div>`;
+        html += 
+                    `<div class="detail-section"><h4>${labelWithInfo('失败原因')}</h4><p style="color:#EF4444;font-size:13px;">${item.failReason}</p></div>
+                    `;
       }
 
       return html;
@@ -3602,33 +3959,49 @@
 
       // 添加 info icon 辅助函数
       function labelWithInfo(text) {
-        return `<span class="label">${text}</span>`;
+        return 
+                    `<span class="label">${text}</span>
+                    `;
       }
 
       let html = '';
 
       // 1. 成功记录的资料详情
-      html += `<div class="detail-section"><h4>实名认证信息 <span class="attempt-tag">认证成功</span></h4>`;
+      html += 
+                    `<div class="detail-section"><h4>实名认证信息 <span class="attempt-tag">认证成功</span></h4>
+                    `;
       html += buildAuthDetail(successRecord);
-      html += `</div>`;
+      html += 
+                    `</div>
+                    `;
 
       // 2. 多次尝试记录
       if (records.length > 1) {
-        html += `<div class="detail-section"><h4>${labelWithInfo('认证历程')}（共 ${records.length} 次尝试）</h4>`;
+        html += 
+                    `<div class="detail-section"><h4>${labelWithInfo('认证历程')}（共 ${records.length} 次尝试）</h4>
+                    `;
         records.sort((a,b) => a.id - b.id).forEach((r, idx) => {
-          const statusText = r.status === 'success' ? '✅ 成功' : r.status === 'fail' ? `❌ 失败 (${r.failReason || ''})` : '⏳ 待审核';
-          html += `<div style="background:white;border-radius:8px;padding:12px 16px;margin-bottom:8px;border:1px solid #E5E7EB;">
+          const statusText = r.status === 'success' ? '✅ 成功' : r.status === 'fail' ? 
+                    `❌ 失败 (${r.failReason || ''})`
+                     : '⏳ 待审核';
+          html += 
+                    `<div style="background:white;border-radius:8px;padding:12px 16px;margin-bottom:8px;border:1px solid #E5E7EB;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
               <span style="font-size:13px;font-weight:600;color:#374151;">第 ${idx+1} 次尝试 - ${r.method}</span>
               <span style="font-size:12px;">${r.submitTime} | ${statusText}</span>
-            </div>`;
+            </div>
+                    `;
           // 对公打款的特殊信息显示（已移除）
           if (false) {
             // 对公打款信息已不再使用
           }
-          html += `</div>`;
+          html += 
+                    `</div>
+                    `;
         });
-        html += `</div>`;
+        html += 
+                    `</div>
+                    `;
       }
 
       return html;
@@ -3863,12 +4236,137 @@
           <td>${e.creatorRole}</td>
           <td style="font-size:12px;color:#6B7280;">${e.createTime}</td>
           <td style="display:flex;gap:12px;">
-            <a class="op-link">编辑</a>
+            <a class="op-link" onclick="showEditEmployeeModal('${e.id}')">编辑</a>
             <a class="op-link warn">禁用</a>
-            <a class="op-link danger">删除</a>
+            <a class="op-link danger" onclick="showDeleteEmployeeModal('${e.id}', '${e.name}')">删除</a>
           </td>
         </tr>`;
       }).join('');
+    }
+
+    let currentEmployeeId = null;
+    let deleteEmployeeId = null;
+
+    function showAddEmployeeModal() {
+      currentEmployeeId = null;
+      const modal = document.getElementById('employeeModal');
+      const overlay = document.getElementById('employeeModalOverlay');
+      const tag = document.getElementById('employeeModalTag');
+      const title = document.getElementById('employeeModalTitle');
+      tag.textContent = '新建';
+      tag.className = 'user-modal-tag';
+      title.textContent = '新增员工';
+      document.getElementById('employeeName').value = '';
+      document.getElementById('employeePhone').value = '';
+      document.getElementById('employeeRole').value = '';
+      modal.style.display = 'flex';
+      overlay.style.display = 'block';
+    }
+
+    function showEditEmployeeModal(id) {
+      const employee = mockEmployees.find(e => e.id === id);
+      if (!employee) return;
+      currentEmployeeId = id;
+      const modal = document.getElementById('employeeModal');
+      const overlay = document.getElementById('employeeModalOverlay');
+      const tag = document.getElementById('employeeModalTag');
+      const title = document.getElementById('employeeModalTitle');
+      tag.textContent = '编辑';
+      tag.className = 'user-modal-tag edit';
+      title.textContent = '编辑员工';
+      document.getElementById('employeeName').value = employee.name;
+      document.getElementById('employeePhone').value = employee.phone;
+      document.getElementById('employeeRole').value = employee.role;
+      modal.style.display = 'flex';
+      overlay.style.display = 'block';
+    }
+
+    function hideEmployeeModal() {
+      const modal = document.getElementById('employeeModal');
+      const overlay = document.getElementById('employeeModalOverlay');
+      modal.style.display = 'none';
+      overlay.style.display = 'none';
+    }
+
+    function submitEmployee() {
+      const name = document.getElementById('employeeName').value.trim();
+      const phone = document.getElementById('employeePhone').value.trim();
+      const role = document.getElementById('employeeRole').value;
+
+      if (!name) {
+        alert('请输入员工姓名');
+        return;
+      }
+      if (!phone) {
+        alert('请输入手机号码');
+        return;
+      }
+      if (!role) {
+        alert('请选择角色权限');
+        return;
+      }
+
+      const now = new Date();
+      const createTime = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+      if (currentEmployeeId) {
+        const index = mockEmployees.findIndex(e => e.id === currentEmployeeId);
+        if (index !== -1) {
+          mockEmployees[index].name = name;
+          mockEmployees[index].phone = phone;
+          mockEmployees[index].role = role;
+        }
+      } else {
+        const newId = String(parseInt(mockEmployees[0].id) + 1);
+        mockEmployees.unshift({
+          id: newId,
+          name: name,
+          phone: phone,
+          role: role,
+          creatorId: '10559',
+          creator: '系统管理员',
+          creatorRole: '管理员(平台)',
+          createTime: createTime
+        });
+        const totalEl = document.getElementById('employeeTotalCount');
+        if (totalEl) {
+          totalEl.textContent = parseInt(totalEl.textContent) + 1;
+        }
+      }
+
+      renderEmployeeTable();
+      hideEmployeeModal();
+    }
+
+    function showDeleteEmployeeModal(id, name) {
+      deleteEmployeeId = id;
+      document.getElementById('deleteEmployeeName').textContent = name;
+      const modal = document.getElementById('deleteEmployeeModal');
+      const overlay = document.getElementById('deleteEmployeeModalOverlay');
+      modal.style.display = 'flex';
+      overlay.style.display = 'block';
+    }
+
+    function hideDeleteEmployeeModal() {
+      const modal = document.getElementById('deleteEmployeeModal');
+      const overlay = document.getElementById('deleteEmployeeModalOverlay');
+      modal.style.display = 'none';
+      overlay.style.display = 'none';
+      deleteEmployeeId = null;
+    }
+
+    function confirmDeleteEmployee() {
+      if (!deleteEmployeeId) return;
+      const index = mockEmployees.findIndex(e => e.id === deleteEmployeeId);
+      if (index !== -1) {
+        mockEmployees.splice(index, 1);
+        const totalEl = document.getElementById('employeeTotalCount');
+        if (totalEl) {
+          totalEl.textContent = Math.max(0, parseInt(totalEl.textContent) - 1);
+        }
+      }
+      renderEmployeeTable();
+      hideDeleteEmployeeModal();
     }
 
     function searchEmployees() {}
@@ -3938,7 +4436,8 @@
       const totalCount = document.getElementById('modelTotalCount');
       totalCount.textContent = mockModels.length;
       tbody.innerHTML = mockModels.map(m => {
-        const tagsHtml = m.tags.map(t => `<span class="tag">${t}</span>`).join('');
+        const tagsHtml = m.tags.map(t => 
+                    `<span class="tag">${t}</span>`).join('');
         let recommendTagHtml = '';
         if (m.recommendTag === 'hot') {
           recommendTagHtml = '<span class="tag-badge tag-hot">HOT</span>';
@@ -4057,12 +4556,11 @@
       emptyState.style.display = 'none';
       list.style.display = '';
       list.insertAdjacentHTML('beforeend', `
-        <div class="endpoint-row">
+<div class="endpoint-row">
           <input type="text" class="form-control" style="width:45%;margin-right:10px;" placeholder="键">
           <input type="text" class="form-control" style="width:45%;" placeholder="值">
           <button class="del-btn" onclick="removeEndpointRow(this)">✕</button>
-        </div>
-      `);
+        </div>                    `);
     }
 
     function removeEndpointRow(el) {
@@ -4305,27 +4803,38 @@
             : '<span class="badge badge-fail">失败</span>';
           
           const progressBar = `
-            <div style="display:flex;align-items:center;gap:8px;">
+<div style="display:flex;align-items:center;gap:8px;">
               <div style="flex:1;min-width:60px;height:6px;background:#E5E7EB;border-radius:3px;overflow:hidden;">
                 <div style="height:100%;width:${log.progress}%;background:${log.status === 'fail' ? '#EF4444' : '#10B981'};border-radius:3px;"></div>
               </div>
               <span style="font-size:12px;color:#6B7280;white-space:nowrap;">${log.progress}%</span>
             </div>
-          `;
+          
+                    `;
 
           const imageCell = log.imageUrl 
-            ? `<img src="${log.imageUrl}" alt="生成图片" style="width:50px;height:50px;object-fit:cover;border-radius:4px;cursor:pointer;" onclick="showImagePreview('${log.imageUrl}')">`
+            ? 
+                    `<img src="${log.imageUrl}" alt="生成图片" style="width:50px;height:50px;object-fit:cover;border-radius:4px;cursor:pointer;" onclick="showImagePreview('${log.imageUrl}')">`
+                    
             : '<span style="color:#D1D5DB;">-</span>';
 
           const failReasonCell = log.failReason 
-            ? `<span style="color:#DC2626;font-size:12px;" title="${log.failReason}">${log.failReason.length > 20 ? log.failReason.substring(0, 20) + '...' : log.failReason}</span>`
+            ? 
+                    `<span style="color:#DC2626;font-size:12px;" title="${log.failReason}">${log.failReason.length > 20 ? log.failReason.substring(0, 20) + '...' : log.failReason}</span>`
+                    
             : '<span style="color:#D1D5DB;">-</span>';
 
-          const userTypeBadge = `<span class="user-type-badge ${log.userType}">${log.userTypeText}</span>`;
-          const userCell = `<div class="user-cell"><span class="user-avatar ${log.userName.charAt(0)}">${log.userName.charAt(0)}</span><span>${log.userName}</span></div>`;
+          const userTypeBadge = 
+                    `<span class="user-type-badge ${log.userType}">${log.userTypeText}</span>
+                    `;
+          const userCell = 
+                    `<div class="user-cell"><span class="user-avatar ${log.userName.charAt(0)}">${log.userName.charAt(0)}</span><span>${log.userName}</span></div>
+                    `;
 
           const refundBadge = log.hasRefund 
-            ? `<span class="badge badge-refund" style="background:#FEFCE8;color:#854D0E;">¥${log.refundAmount}</span>`
+            ? 
+                    `<span class="badge badge-refund" style="background:#FEFCE8;color:#854D0E;">¥${log.refundAmount}</span>`
+                    
             : '<span style="color:#D1D5DB;">-</span>';
 
           return `<tr>
@@ -4365,8 +4874,8 @@
       const start = (drawingCurrentPage - 1) * drawingPageSize + 1;
       const end = Math.min(drawingCurrentPage * drawingPageSize, total);
 
-      document.getElementById('drawingPageInfo').textContent = 
-        total === 0 ? '显示第 0 条 - 第 0 条, 共 0 条' : `显示第 ${start} 条 - 第 ${end} 条, 共 ${total} 条`;
+      document.getElementById('drawingPageInfo').textContent = `total === 0 ? '显示第 0 条 - 第 0 条, 共 0 条' : 
+                    显示第 ${start} 条 - 第 ${end} 条, 共 ${total} 条`;
       document.getElementById('drawingTotalPages').textContent = `总页数: ${totalPages}`;
 
       const buttonsContainer = document.getElementById('drawingPageButtons');
@@ -4380,7 +4889,9 @@
       }
 
       for (let i = startPage; i <= endPage; i++) {
-        buttonsHtml += `<button class="pagination-btn ${i === drawingCurrentPage ? 'active' : ''}" onclick="goToDrawingPage(${i})">${i}</button>`;
+        buttonsHtml += 
+                    `<button class="pagination-btn ${i === drawingCurrentPage ? 'active' : ''}" onclick="goToDrawingPage(${i})">${i}</button>
+                    `;
       }
       buttonsContainer.innerHTML = buttonsHtml;
     }
@@ -4685,41 +5196,62 @@
               : '<span class="badge badge-pending">运行中</span>';
           
           const progressBar = `
-            <div style="display:flex;align-items:center;gap:8px;">
+<div style="display:flex;align-items:center;gap:8px;">
               <div style="flex:1;min-width:60px;height:6px;background:#E5E7EB;border-radius:3px;overflow:hidden;">
                 <div style="height:100%;width:${log.progress}%;background:${log.status === 'fail' ? '#EF4444' : (log.status === 'running' ? '#3B82F6' : '#10B981')};border-radius:3px;${log.status === 'running' ? 'animation:pulse 1.5s infinite;' : ''}"></div>
               </div>
               <span style="font-size:12px;color:#6B7280;white-space:nowrap;">${log.progress}%</span>
             </div>
-          `;
           
-          const typeBadge = `<span class="type-badge">${log.type}</span>`;
+                    `;
+          
+          const typeBadge = 
+                    `<span class="type-badge">${log.type}</span>
+                    `;
           
           const channelCell = log.channel === '-' 
             ? '<span style="color:#9CA3AF;">-</span>' 
-            : `<span class="group-badge" title="渠道ID: ${log.channelId}">${log.channel}</span>`;
+            : 
+                    `<span class="group-badge" title="渠道ID: ${log.channelId}">${log.channel}</span>
+                    `;
           
           // 用户展示 - 统一带头像样式（系统用户用灰色头像）
           const isSystemUser = log.agentId && log.agentId.startsWith('SYS');
           const userAvatar = isSystemUser ? log.user.charAt(0) : log.user.charAt(0);
           const avatarStyle = isSystemUser ? 'background:#6B7280;' : '';
-          const userCell = `<div class="user-cell"><span class="user-avatar" style="${avatarStyle}">${userAvatar}</span><span>${log.user}</span></div>`;
+          const userCell = 
+                    `<div class="user-cell"><span class="user-avatar" style="${avatarStyle}">${userAvatar}</span><span>${log.user}</span></div>
+                    `;
           
-          const userTypeBadge = `<span class="user-type-badge ${log.userType}">${log.userTypeText}</span>`;
+          const userTypeBadge = 
+                    `<span class="user-type-badge ${log.userType}">${log.userTypeText}</span>
+                    `;
           
           // 手机号和代理信息展示
-          const phoneCell = log.phone === '-' ? '<span style="color:#9CA3AF;">-</span>' : `<span style="font-family:monospace;font-size:12px;">${log.phone}</span>`;
-          const agentIdCell = log.agentId === '-' ? '<span style="color:#9CA3AF;">-</span>' : `<span class="token-badge" style="font-family:monospace;">${log.agentId}</span>`;
+          const phoneCell = log.phone === '-' ? '<span style="color:#9CA3AF;">-</span>' : 
+                    `<span style="font-family:monospace;font-size:12px;">${log.phone}</span>
+                    `;
+          const agentIdCell = log.agentId === '-' ? '<span style="color:#9CA3AF;">-</span>' : 
+                    `<span class="token-badge" style="font-family:monospace;">${log.agentId}</span>
+                    `;
           const agentNameCell = log.agentName === '-' ? '<span style="color:#9CA3AF;">-</span>' : log.agentName;
           
-          const detailCell = `<span style="font-size:12px;color:#6B7280;display:block;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${log.detail}">${log.detail}</span>`;
+          const detailCell = 
+                    `<span style="font-size:12px;color:#6B7280;display:block;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${log.detail}">${log.detail}</span>
+                    `;
           
-          const taskIdCell = `<span class="token-badge" style="font-family:monospace;font-size:11px;">${log.taskId}</span>`;
+          const taskIdCell = 
+                    `<span class="token-badge" style="font-family:monospace;font-size:11px;">${log.taskId}</span>
+                    `;
           
-          const costTimeBadge = `<span class="time-badge${log.status === 'fail' ? ' warning' : ''}">${log.costTime}</span>`;
+          const costTimeBadge = 
+                    `<span class="time-badge${log.status === 'fail' ? ' warning' : ''}">${log.costTime}</span>
+                    `;
 
           const refundBadge = log.hasRefund 
-            ? `<span class="badge badge-refund" style="background:#FEFCE8;color:#854D0E;">¥${log.refundAmount}</span>`
+            ? 
+                    `<span class="badge badge-refund" style="background:#FEFCE8;color:#854D0E;">¥${log.refundAmount}</span>`
+                    
             : '<span style="color:#D1D5DB;">-</span>';
 
           return `<tr>
@@ -4757,8 +5289,8 @@
       const start = (taskCurrentPage - 1) * taskPageSize + 1;
       const end = Math.min(taskCurrentPage * taskPageSize, total);
 
-      document.getElementById('taskPageInfo').textContent = 
-        total === 0 ? '显示第 0 条 - 第 0 条, 共 0 条' : `显示第 ${start} 条 - 第 ${end} 条, 共 ${total} 条`;
+      document.getElementById('taskPageInfo').textContent = `total === 0 ? '显示第 0 条 - 第 0 条, 共 0 条' : 
+                    显示第 ${start} 条 - 第 ${end} 条, 共 ${total} 条`;
       document.getElementById('taskTotalPages').textContent = `总页数: ${totalPages}`;
 
       const buttonsContainer = document.getElementById('taskPageButtons');
@@ -4772,7 +5304,9 @@
       }
 
       for (let i = startPage; i <= endPage; i++) {
-        buttonsHtml += `<button class="pagination-btn ${i === taskCurrentPage ? 'active' : ''}" onclick="goToTaskPage(${i})">${i}</button>`;
+        buttonsHtml += 
+                    `<button class="pagination-btn ${i === taskCurrentPage ? 'active' : ''}" onclick="goToTaskPage(${i})">${i}</button>
+                    `;
       }
       buttonsContainer.innerHTML = buttonsHtml;
     }
@@ -4925,6 +5459,16 @@
           const isCollapsed = groupDiv.classList.toggle('collapsed');
           title.classList.toggle('collapsed');
           localStorage.setItem('navGroup_' + index, isCollapsed ? 'collapsed' : 'expanded');
+          
+          // 如果是财务管理分组，切换到财务管理页面
+          const titleText = title.textContent.trim();
+          if (titleText === '财务管理') {
+            switchPageByName('finance');
+          }
+          // 如果是企业管理分组，切换到企业管理页面
+          if (titleText === '企业管理') {
+            switchPageByName('enterprise');
+          }
         });
 
         // 应用保存的状态
@@ -4933,6 +5477,53 @@
           title.classList.add('collapsed');
         }
       });
+    }
+
+    function switchPageByName(page) {
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      document.getElementById('authPage').style.display = page === 'auth' ? '' : 'none';
+      document.getElementById('rolePage').style.display = page === 'role' ? '' : 'none';
+      document.getElementById('menuPage').style.display = page === 'menu' ? 'block' : 'none';
+      document.getElementById('employeePage').style.display = page === 'employee' ? 'block' : 'none';
+      document.getElementById('modelPage').style.display = page === 'model' ? 'block' : 'none';
+      document.getElementById('tokenPage').style.display = page === 'token' ? 'block' : 'none';
+      document.getElementById('usagePage').style.display = page === 'usage' ? 'block' : 'none';
+      document.getElementById('drawingPage').style.display = page === 'drawing' ? 'block' : 'none';
+      document.getElementById('taskPage').style.display = page === 'task' ? 'block' : 'none';
+      document.getElementById('userPage').style.display = page === 'user' ? 'block' : 'none';
+      document.getElementById('statsPage').style.display = page === 'stats' ? 'block' : 'none';
+      document.getElementById('financePage').style.display = page === 'finance' ? 'block' : 'none';
+      document.getElementById('enterprisePage').style.display = page === 'enterprise' ? 'block' : 'none';
+      document.getElementById('systemPage').style.display = page === 'system' ? 'block' : 'none';
+
+      const titles = {
+        dashboard: { title: '数据看板', subtitle: '查看系统数据统计和分析' },
+        token: { title: '令牌管理', subtitle: '管理API访问令牌' },
+        usage: { title: '使用日志', subtitle: '查看API使用记录' },
+        drawing: { title: '绘图日志', subtitle: '查看绘图操作记录' },
+        task: { title: '任务日志', subtitle: '查看任务执行记录' },
+        wallet: { title: '钱包管理', subtitle: '管理账户资金' },
+        settings: { title: '个人设置', subtitle: '管理个人信息' },
+        auth: { title: '认证管理', subtitle: '查看和管理用户的认证与实名记录' },
+        channel: { title: '渠道管理', subtitle: '管理渠道信息' },
+        subscribe: { title: '订阅管理', subtitle: '管理订阅服务' },
+        model: { title: '模型管理', subtitle: '管理AI模型' },
+        deploy: { title: '模型部署', subtitle: '部署和管理模型服务' },
+        coupon: { title: '兑换码管理', subtitle: '管理兑换码' },
+        stats: { title: '业绩统计', subtitle: '查看业绩数据统计' },
+        user: { title: '用户管理', subtitle: '管理用户账号和信息' },
+        agent: { title: '代理管理', subtitle: '管理代理商信息' },
+        employee: { title: '平台员工管理', subtitle: '管理平台员工账号' },
+        role: { title: '角色管理', subtitle: '管理系统角色和权限' },
+        menu: { title: '菜单管理', subtitle: '管理系统菜单配置' },
+        finance: { title: '财务管理', subtitle: '管理财务相关记录' },
+        enterprise: { title: '企业管理', subtitle: '管理企业用户和信息' },
+        system: { title: '系统设置', subtitle: '配置系统参数' },
+      };
+
+      const titleData = titles[page] || { title: '', subtitle: '' };
+      document.getElementById('pageTitle').textContent = titleData.title;
+      document.getElementById('pageSubtitle').textContent = titleData.subtitle;
     }
 
     function switchPage(page) {
@@ -5150,15 +5741,14 @@
       el.classList.toggle('expanded');
     }
     
-    function viewPhone(btn, phone) {
-      const parent = btn.parentElement;
-      const maskedSpan = parent.querySelector('.phone-masked');
-      if (maskedSpan) {
-        maskedSpan.textContent = phone;
-        btn.style.display = 'none';
-      }
+    function batchViewPhones() {
+      const maskedSpans = document.querySelectorAll('#userTableBody .phone-masked');
+      const phones = ['13812345621','13912348821','13612347733','13712349944'];
+      maskedSpans.forEach(function(span, idx) {
+        if (phones[idx]) span.textContent = phones[idx];
+      });
     }
-    
+
     function exportUserList() {
       alert('导出功能：根据当前筛选条件导出用户列表数据');
     }
@@ -5267,8 +5857,103 @@
       event.currentTarget.classList.add('active');
     }
 
+    // ========== 业绩统计：模拟数据 ==========
+    const statsMockData = [
+      { date: '2026-06-30', userId: 'U1001', userName: '张明远', userType: '个人', agentId: 'AG001', agentName: '星辰科技', orders: 12, orderAmount: '358.50', actualAmount: '345.20', rechargeConsume: '280.00', equityConsume: '65.20', requests: 346, tokens: 128400 },
+      { date: '2026-06-30', userId: 'U1002', userName: '李思雨', userType: '企业', agentId: 'AG001', agentName: '星辰科技', orders: 28, orderAmount: '1,256.00', actualAmount: '1,198.80', rechargeConsume: '980.00', equityConsume: '218.80', requests: 892, tokens: 356800 },
+      { date: '2026-06-30', userId: 'U1003', userName: '王建国', userType: '个人', agentId: 'AG002', agentName: '云海网络', orders: 5, orderAmount: '128.00', actualAmount: '122.50', rechargeConsume: '122.50', equityConsume: '0.00', requests: 87, tokens: 34560 },
+      { date: '2026-06-29', userId: 'U1004', userName: '陈晓薇', userType: '企业', agentId: 'AG002', agentName: '云海网络', orders: 42, orderAmount: '3,580.00', actualAmount: '3,420.60', rechargeConsume: '2,800.00', equityConsume: '620.60', requests: 1256, tokens: 512000 },
+      { date: '2026-06-29', userId: 'U1005', userName: '赵宇航', userType: '个人', agentId: 'AG003', agentName: '张伟', orders: 8, orderAmount: '215.60', actualAmount: '208.30', rechargeConsume: '208.30', equityConsume: '0.00', requests: 198, tokens: 76800 },
+      { date: '2026-06-29', userId: 'U1006', userName: '刘婉清', userType: '企业', agentId: 'AG001', agentName: '星辰科技', orders: 19, orderAmount: '890.00', actualAmount: '852.40', rechargeConsume: '680.00', equityConsume: '172.40', requests: 534, tokens: 215600 },
+      { date: '2026-06-28', userId: 'U1007', userName: '孙浩然', userType: '个人', agentId: 'AG004', agentName: '智联未来', orders: 3, orderAmount: '68.50', actualAmount: '65.80', rechargeConsume: '65.80', equityConsume: '0.00', requests: 45, tokens: 16800 },
+      { date: '2026-06-28', userId: 'U1008', userName: '周美琳', userType: '企业', agentId: 'AG003', agentName: '张伟', orders: 35, orderAmount: '2,180.00', actualAmount: '2,086.50', rechargeConsume: '1,750.00', equityConsume: '336.50', requests: 978, tokens: 398400 },
+      { date: '2026-06-28', userId: 'U1009', userName: '吴天宇', userType: '个人', agentId: 'AG002', agentName: '云海网络', orders: 7, orderAmount: '186.20', actualAmount: '178.90', rechargeConsume: '178.90', equityConsume: '0.00', requests: 156, tokens: 58900 },
+      { date: '2026-06-28', userId: 'U1010', userName: '郑雅琴', userType: '企业', agentId: 'AG005', agentName: '鼎新创新', orders: 51, orderAmount: '4,560.00', actualAmount: '4,380.50', rechargeConsume: '3,600.00', equityConsume: '780.50', requests: 1680, tokens: 689600 },
+      { date: '2026-06-27', userId: 'U1001', userName: '张明远', userType: '个人', agentId: 'AG001', agentName: '星辰科技', orders: 9, orderAmount: '268.30', actualAmount: '257.60', rechargeConsume: '257.60', equityConsume: '0.00', requests: 267, tokens: 98500 },
+      { date: '2026-06-27', userId: 'U1002', userName: '李思雨', userType: '企业', agentId: 'AG001', agentName: '星辰科技', orders: 33, orderAmount: '1,480.00', actualAmount: '1,418.20', rechargeConsume: '1,150.00', equityConsume: '268.20', requests: 1045, tokens: 425600 },
+      { date: '2026-06-27', userId: 'U1011', userName: '黄子轩', userType: '个人', agentId: 'AG004', agentName: '智联未来', orders: 6, orderAmount: '152.80', actualAmount: '146.50', rechargeConsume: '146.50', equityConsume: '0.00', requests: 112, tokens: 43200 },
+      { date: '2026-06-27', userId: 'U1012', userName: '林雨萱', userType: '企业', agentId: 'AG005', agentName: '鼎新创新', orders: 24, orderAmount: '1,680.00', actualAmount: '1,612.80', rechargeConsume: '1,320.00', equityConsume: '292.80', requests: 768, tokens: 312000 },
+      { date: '2026-06-26', userId: 'U1003', userName: '王建国', userType: '个人', agentId: 'AG002', agentName: '云海网络', orders: 4, orderAmount: '96.50', actualAmount: '92.80', rechargeConsume: '92.80', equityConsume: '0.00', requests: 68, tokens: 25600 },
+      { date: '2026-06-26', userId: 'U1004', userName: '陈晓薇', userType: '企业', agentId: 'AG002', agentName: '云海网络', orders: 38, orderAmount: '3,120.00', actualAmount: '2,990.40', rechargeConsume: '2,450.00', equityConsume: '540.40', requests: 1134, tokens: 462000 },
+      { date: '2026-06-26', userId: 'U1008', userName: '周美琳', userType: '企业', agentId: 'AG003', agentName: '张伟', orders: 22, orderAmount: '1,356.00', actualAmount: '1,300.80', rechargeConsume: '1,080.00', equityConsume: '220.80', requests: 658, tokens: 267800 },
+      { date: '2026-06-25', userId: 'U1005', userName: '赵宇航', userType: '个人', agentId: 'AG003', agentName: '张伟', orders: 11, orderAmount: '298.60', actualAmount: '286.50', rechargeConsume: '286.50', equityConsume: '0.00', requests: 245, tokens: 96800 },
+      { date: '2026-06-25', userId: 'U1010', userName: '郑雅琴', userType: '企业', agentId: 'AG005', agentName: '鼎新创新', orders: 46, orderAmount: '4,120.00', actualAmount: '3,956.80', rechargeConsume: '3,250.00', equityConsume: '706.80', requests: 1520, tokens: 620800 },
+      { date: '2026-06-25', userId: 'U1006', userName: '刘婉清', userType: '企业', agentId: 'AG001', agentName: '星辰科技', orders: 15, orderAmount: '720.00', actualAmount: '691.20', rechargeConsume: '560.00', equityConsume: '131.20', requests: 426, tokens: 172800 }
+    ];
+
+    function renderStatsTable(data) {
+      const tbody = document.getElementById('statsTableBody');
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;color:#9CA3AF;padding:40px;">暂无数据</td></tr>';
+        return;
+      }
+      let totalOrders = 0, totalOrderAmount = 0, totalActual = 0, totalRecharge = 0, totalEquity = 0, totalRequests = 0, totalTokens = 0;
+      let html = '';
+      data.forEach(row => {
+        totalOrders += row.orders;
+        totalOrderAmount += parseFloat(row.orderAmount.replace(/,/g, ''));
+        totalActual += parseFloat(row.actualAmount.replace(/,/g, ''));
+        totalRecharge += parseFloat(row.rechargeConsume.replace(/,/g, ''));
+        totalEquity += parseFloat(row.equityConsume.replace(/,/g, ''));
+        totalRequests += row.requests;
+        totalTokens += row.tokens;
+        const userTypeClass = row.userType === '企业' ? 'enterprise' : 'personal';
+        html += '<tr>';
+        html += '<td>' + row.date + '</td>';
+        html += '<td><span style="font-family:monospace;color:#374151;">' + row.userId + '</span></td>';
+        html += '<td>' + row.userName + '</td>';
+        html += '<td><span class="user-type-badge ' + userTypeClass + '">' + row.userType + '</span></td>';
+        html += '<td><span style="font-family:monospace;color:#6B7280;">' + row.agentId + '</span></td>';
+        html += '<td>' + row.agentName + '</td>';
+        html += '<td>' + row.orders + '</td>';
+        html += '<td style="font-weight:500;color:#1F2937;">' + row.orderAmount + '</td>';
+        html += '<td style="font-weight:500;color:#1F2937;">' + row.actualAmount + '</td>';
+        html += '<td style="color:#10B981;font-weight:500;">' + row.rechargeConsume + '</td>';
+        html += '<td style="color:#EC4899;font-weight:500;">' + row.equityConsume + '</td>';
+        html += '<td>' + row.requests.toLocaleString() + '</td>';
+        html += '<td>' + row.tokens.toLocaleString() + '</td>';
+        html += '</tr>';
+      });
+      html += '<tr style="background:#F9FAFB;font-weight:600;">';
+      html += '<td>合计</td><td></td><td></td><td></td><td></td><td></td>';
+      html += '<td>' + totalOrders + '</td>';
+      html += '<td style="color:#1F2937;">' + totalOrderAmount.toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2}) + '</td>';
+      html += '<td style="color:#1F2937;">' + totalActual.toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2}) + '</td>';
+      html += '<td style="color:#10B981;">' + totalRecharge.toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2}) + '</td>';
+      html += '<td style="color:#EC4899;">' + totalEquity.toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2}) + '</td>';
+      html += '<td>' + totalRequests.toLocaleString() + '</td>';
+      html += '<td>' + totalTokens.toLocaleString() + '</td>';
+      html += '</tr>';
+      tbody.innerHTML = html;
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const todayData = data.filter(r => r.date === todayStr);
+      const todayConsume = todayData.reduce((s, r) => s + parseFloat(r.actualAmount.replace(/,/g, '')), 0);
+      const consumeEl = document.querySelector('.consume-amount');
+      if (consumeEl) consumeEl.textContent = '\u00A5' + todayConsume.toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2});
+    }
+
     function searchStats() {
-      alert('查询统计数据');
+      const dateStart = document.getElementById('statsDateStart').value.trim();
+      const dateEnd = document.getElementById('statsDateEnd').value.trim();
+      const userId = document.getElementById('statsUserId').value.trim().toLowerCase();
+      const userName = document.getElementById('statsUserName').value.trim().toLowerCase();
+      const userType = document.getElementById('statsUserType').value;
+      const agentId = document.getElementById('statsAgentId').value.trim().toLowerCase();
+      const statType = document.getElementById('statsStatType').value;
+      const agentName = document.getElementById('statsAgentName').value.trim().toLowerCase();
+      let filtered = statsMockData.filter(row => {
+        if (dateStart && row.date < dateStart) return false;
+        if (dateEnd && row.date > dateEnd) return false;
+        if (userId && !row.userId.toLowerCase().includes(userId)) return false;
+        if (userName && !row.userName.toLowerCase().includes(userName)) return false;
+        if (userType === 'personal' && row.userType !== '个人') return false;
+        if (userType === 'enterprise' && row.userType !== '企业') return false;
+        if (agentId && !row.agentId.toLowerCase().includes(agentId)) return false;
+        if (agentName && !row.agentName.toLowerCase().includes(agentName)) return false;
+        if (statType === 'team' && !row.agentId) return false;
+        return true;
+      });
+      renderStatsTable(filtered);
     }
 
     function resetStatsFilter() {
@@ -5280,12 +5965,213 @@
       document.getElementById('statsAgentId').value = '';
       document.getElementById('statsStatType').value = 'direct';
       document.getElementById('statsAgentName').value = '';
+      renderStatsTable(statsMockData);
     }
 
     function exportStats() {
       alert('导出统计数据');
     }
-  </script>
+
+    // 页面加载时渲染
+    document.addEventListener('DOMContentLoaded', function() {
+      renderStatsTable(statsMockData);
+    });
+// ========== 令牌管理：编辑弹窗 ==========
+    let tokenEditIndex = -1;
+    const tokenMockData = [
+      { name: '180', group: 'vip', key: 'sk-oCXU**********Z7dl', model: 'GLM-5.1', ip: '无限制', userType: 'enterprise', agentId: 'AG001', agentName: '星辰科技有限公司', expire: '9999-12-31T23:59:59', amount: '0.000000', unlimited: true },
+      { name: '180', group: 'user', key: 'sk-WJh5**********Djwt', model: '其他', ip: '无限制', userType: 'personal', agentId: 'AG003', agentName: '张伟', expire: '9999-12-31T23:59:59', amount: '0.000000', unlimited: true },
+      { name: '180', group: 'default', key: 'sk-Gd2H**********lgwc', model: '', ip: '无限制', userType: 'enterprise', agentId: 'AG002', agentName: '云海网络科技', expire: '9999-12-31T23:59:59', amount: '0.000000', unlimited: true }
+    ];
+
+    const agentOptions = [
+      { id: 'AG001', name: '星辰科技有限公司' },
+      { id: 'AG002', name: '云海网络科技' },
+      { id: 'AG003', name: '张伟' },
+      { id: 'AG004', name: '智联未来科技' },
+      { id: 'AG005', name: '鼎新创新工场' }
+    ];
+
+    function openTokenEditModal(index) {
+      tokenEditIndex = index;
+      const data = tokenMockData[index];
+      document.getElementById('token-edit-name').value = data.name;
+      document.getElementById('token-edit-expire').value = data.expire;
+      document.getElementById('token-edit-amount').value = data.amount;
+      document.getElementById('token-edit-unlimited').checked = data.unlimited;
+      document.getElementById('token-edit-model-limit').value = data.model === 'GLM-5.1' ? 'glm' : data.model === '其他' ? 'other' : '';
+      document.getElementById('token-edit-ip-whitelist').value = data.ip === '无限制' ? '' : data.ip;
+      document.getElementById('token-edit-agent-input').value = data.agentId + ' - ' + data.agentName;
+
+      if (data.unlimited) {
+        document.getElementById('token-edit-amount').disabled = true;
+        document.getElementById('token-edit-amount').style.opacity = '0.5';
+      } else {
+        document.getElementById('token-edit-amount').disabled = false;
+        document.getElementById('token-edit-amount').style.opacity = '1';
+      }
+
+      // Clear active on expire quick buttons
+      document.querySelectorAll('#tokenEditModal .expire-quick-btn').forEach(b => b.classList.remove('active'));
+
+      document.getElementById('tokenEditModalOverlay').style.display = 'block';
+      document.getElementById('tokenEditModal').classList.add('token-modal-open');
+    }
+
+    function closeTokenEditModal() {
+      document.getElementById('tokenEditModalOverlay').style.display = 'none';
+      document.getElementById('tokenEditModal').classList.remove('token-modal-open');
+      document.getElementById('token-edit-agent-dropdown').classList.remove('show');
+      tokenEditIndex = -1;
+    }
+
+    function submitTokenEdit() {
+      const name = document.getElementById('token-edit-name').value.trim();
+      if (!name) {
+        alert('请输入名称');
+        return;
+      }
+      alert('令牌编辑成功！');
+      closeTokenEditModal();
+    }
+
+    function setTokenEditExpireQuick(btn, type) {
+      document.querySelectorAll('#tokenEditModal .expire-quick-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const input = document.getElementById('token-edit-expire');
+      const now = new Date();
+      switch(type) {
+        case 'never':
+          input.value = '9999-12-31T23:59:59';
+          break;
+        case 'month':
+          now.setMonth(now.getMonth() + 1);
+          input.value = formatDatetimeLocal(now);
+          break;
+        case 'day':
+          now.setDate(now.getDate() + 1);
+          input.value = formatDatetimeLocal(now);
+          break;
+        case 'hour':
+          now.setHours(now.getHours() + 1);
+          input.value = formatDatetimeLocal(now);
+          break;
+      }
+    }
+
+    function formatDatetimeLocal(date) {
+      const y = date.getFullYear();
+      const mo = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      const h = String(date.getHours()).padStart(2, '0');
+      const mi = String(date.getMinutes()).padStart(2, '0');
+      const s = String(date.getSeconds()).padStart(2, '0');
+      return `${y}-${mo}-${d}T${h}:${mi}:${s}`;
+    }
+
+    function toggleTokenEditUnlimited(checked) {
+      const amountInput = document.getElementById('token-edit-amount');
+      if (checked) {
+        amountInput.disabled = true;
+        amountInput.style.opacity = '0.5';
+      } else {
+        amountInput.disabled = false;
+        amountInput.style.opacity = '1';
+      }
+    }
+
+    // ========== 代理商下拉搜索 ==========
+    function showTokenAgentDropdown() {
+      const input = document.getElementById('token-edit-agent-input');
+      const dropdown = document.getElementById('token-edit-agent-dropdown');
+      filterTokenAgentOptions();
+      dropdown.classList.add('show');
+    }
+
+    function hideTokenAgentDropdown() {
+      setTimeout(function() {
+        document.getElementById('token-edit-agent-dropdown').classList.remove('show');
+      }, 200);
+    }
+
+    function filterTokenAgentOptions() {
+      const input = document.getElementById('token-edit-agent-input').value.toLowerCase();
+      const dropdown = document.getElementById('token-edit-agent-dropdown');
+      const filtered = agentOptions.filter(opt =>
+        opt.id.toLowerCase().includes(input) || opt.name.toLowerCase().includes(input)
+      );
+      if (filtered.length === 0) {
+        dropdown.innerHTML = '<div class="token-agent-option no-result">无匹配结果</div>';
+      } else {
+        dropdown.innerHTML = filtered.map(opt =>
+          
+                    `<div class="token-agent-option" onclick="selectTokenAgent('${opt.id}', '${opt.name}')">
+            <span class="agent-name">${opt.name}</span><span class="agent-id">${opt.id}</span>
+          </div>        `).join('');
+      }
+      dropdown.classList.add('show');
+    }
+
+    function selectTokenAgent(id, name) {
+      document.getElementById('token-edit-agent-input').value = id + ' - ' + name;
+      document.getElementById('token-edit-agent-dropdown').classList.remove('show');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      const wrap = document.getElementById('token-edit-agent-wrap');
+      if (wrap && !wrap.contains(e.target)) {
+        document.getElementById('token-edit-agent-dropdown').classList.remove('show');
+      }
+    });
+// ========== 令牌管理：状态切换 ==========
+    function toggleTokenStatus(index, btn) {
+      const row = document.querySelectorAll('.tokens-table tbody tr')[index];
+      if (!row) return;
+      const statusBadge = row.querySelector('.status-badge');
+      if (btn.textContent === '禁用') {
+        if (!confirm('确定要禁用该令牌吗？禁用后该令牌将无法使用。')) return;
+        statusBadge.textContent = '已禁用';
+        statusBadge.classList.remove('active');
+        statusBadge.classList.add('disabled');
+        btn.textContent = '启用';
+        btn.classList.remove('enable-btn');
+        btn.classList.add('enable-btn-active');
+      } else {
+        if (!confirm('确定要启用该令牌吗？')) return;
+        statusBadge.textContent = '已启用';
+        statusBadge.classList.remove('disabled');
+        statusBadge.classList.add('active');
+        btn.textContent = '禁用';
+        btn.classList.remove('enable-btn-active');
+        btn.classList.add('enable-btn');
+      }
+    }
+
+    // ========== 令牌管理：删除弹窗 ==========
+    let deleteTokenIndex = -1;
+
+    function showDeleteTokenModal(index) {
+      deleteTokenIndex = index;
+      const data = tokenMockData[index];
+      document.getElementById('deleteTokenName').textContent = data.name;
+      document.getElementById('tokenDeleteModalOverlay').style.display = 'block';
+      document.getElementById('tokenDeleteModal').classList.add('token-modal-open');
+    }
+
+    function hideDeleteTokenModal() {
+      document.getElementById('tokenDeleteModalOverlay').style.display = 'none';
+      document.getElementById('tokenDeleteModal').classList.remove('token-modal-open');
+      deleteTokenIndex = -1;
+    }
+
+    function confirmDeleteToken() {
+      if (deleteTokenIndex >= 0) {
+        alert('令牌已删除');
+        hideDeleteTokenModal();
+      }
+    }
+</script>
   <div id="global-dropdown"></div>
 </body>
 </html>
